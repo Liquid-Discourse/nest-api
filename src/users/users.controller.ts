@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './user.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getUsers(): Promise<User[]> {
+  getUsers(): Promise<UserEntity[]> {
     return this.usersService.findAll();
   }
 
@@ -18,7 +18,7 @@ export class UsersController {
   }
 
   @Post()
-  createUser(@Body() body: CreateUserDTO): Promise<User> {
+  createUser(@Body() body: CreateUserDTO): Promise<UserEntity> {
     return this.usersService.create(body);
     // return `This action adds a new user (maybe via twitter login). POST data includes: ${body.twitterID}`;
   }

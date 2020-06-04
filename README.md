@@ -11,11 +11,11 @@ $ yarn install
 ## Running the app
 
 ```bash
-# development
-$ yarn run start
-
 # watch mode (recommended for dev)
 $ yarn run start:dev
+
+# development
+$ yarn run start
 
 # production mode
 $ yarn run start:prod
