@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-// ENV config
-import { ConfigService } from '@nestjs/config';
 // ORM
 import { TypeOrmModule } from '@nestjs/typeorm';
 // Our logic
@@ -11,26 +9,27 @@ const isProd = process.env.NODE_ENV === 'production';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => {
+      useFactory: () => {
         return isProd
           ? {
-              url: configService.get('DATABASE_URL'),
+              url: process.env.DATABASE_URL,
               type: 'postgres',
-              synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE'),
+              synchronize: (process.env
+                .DATABASE_SYNCHRONIZE as unknown) as boolean,
               autoLoadEntities: true,
             }
           : {
-              host: configService.get('DATABASE_HOST'),
-              port: +configService.get<number>('DATABASE_PORT'),
-              username: configService.get('DATABASE_USERNAME'),
-              password: configService.get('DATABASE_PASSWORD'),
-              database: configService.get('DATABASE_NAME'),
+              host: process.env.DATABASE_HOST,
+              port: (process.env.DATABASE_PORT as unknown) as number,
+              username: process.env.DATABASE_USERNAME,
+              password: process.env.DATABASE_PASSWORD,
+              database: process.env.DATABASE_NAME,
               type: 'postgres',
-              synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE'),
+              synchronize: (process.env
+                .DATABASE_SYNCHRONIZE as unknown) as boolean,
               autoLoadEntities: true,
             };
       },
-      inject: [ConfigService],
     }),
   ],
   providers: [DatabaseService],
