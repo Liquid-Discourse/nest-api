@@ -1,6 +1,14 @@
-## Description
+# Liquid Discourse NestJS API
 
-NestJS app for Liquid Discourse. 
+- [Liquid Discourse NestJS API](#liquid-discourse-nestjs-api)
+  - [Docs](#docs)
+  - [Installation](#installation)
+  - [Running the app](#running-the-app)
+  - [Test](#test)
+
+## Docs
+
+<http://liquid-discourse-api.herokuapp.com/docs>
 
 ## Installation
 
@@ -33,4 +41,3 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
-
