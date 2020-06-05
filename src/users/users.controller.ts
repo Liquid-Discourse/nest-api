@@ -1,15 +1,27 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDTO } from './user.dto';
+
+// Database access
 import { UserEntity } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+// A DTO is a data transfer object (basically just the stuff submitted in the website form)
+// we get validation for free!
+export class CreateUserDTO {
+  firstName: string;
+  twitterID: string;
+}
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
+  ) {}
 
   @Get()
   getUsers(): Promise<UserEntity[]> {
-    return this.usersService.findAll();
+    return this.usersRepository.find();
   }
 
   @Get(':username')
@@ -19,7 +31,8 @@ export class UsersController {
 
   @Post()
   createUser(@Body() body: CreateUserDTO): Promise<UserEntity> {
-    return this.usersService.create(body);
-    // return `This action adds a new user (maybe via twitter login). POST data includes: ${body.twitterID}`;
+    const user = new UserEntity();
+    user.firstName = body.firstName;
+    return this.usersRepository.save(user);
   }
 }
