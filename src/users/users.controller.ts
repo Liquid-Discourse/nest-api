@@ -8,8 +8,7 @@ import { Repository } from 'typeorm';
 // A DTO is a data transfer object (basically just the stuff submitted in the website form)
 // we get validation for free!
 export class CreateUserDTO {
-  firstName: string;
-  twitterID: string;
+  emailAddress: string;
 }
 
 @Controller('users')
@@ -32,7 +31,7 @@ export class UsersController {
   @Post()
   createUser(@Body() body: CreateUserDTO): Promise<UserEntity> {
     const user = new UserEntity();
-    user.firstName = body.firstName;
+    user.emailAddress = body.emailAddress;
     return this.usersRepository.save(user);
   }
 }

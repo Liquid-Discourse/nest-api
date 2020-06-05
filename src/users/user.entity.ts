@@ -8,14 +8,20 @@ export class UserEntity {
   id: number;
 
   @Column({ unique: true })
-  email: string;
+  emailAddress: string;
 
-  @Column()
+  @Column({ nullable: true })
   firstName: string;
+
+  @Column({ nullable: true })
+  restOfName: string;
 
   @Column({ nullable: true })
   twitterUsername: string;
 
   @Column({ nullable: true })
-  followerCount: number;
+  twitterFollowerCount: number;
+
+  @Column({ default: true })
+  profileIsPublic: boolean;
 }
