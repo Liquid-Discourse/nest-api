@@ -7,15 +7,15 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //   @Column()
-  //   email: string;
+  @Column({ unique: true })
+  email: string;
 
   @Column()
   firstName: string;
 
-  //   @Column()
-  //   restOfName: string;
+  @Column({ nullable: true })
+  twitterUsername: string;
 
-  //   @Column()
-  //   twitterUsername: string;
+  @Column({ nullable: true })
+  followerCount: number;
 }
