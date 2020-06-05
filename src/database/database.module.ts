@@ -12,11 +12,10 @@ const isProd = process.env.NODE_ENV === 'production';
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
-        console.log('isProd', isProd);
-        console.log('DB URL', process.env.DATABASE_URL);
         return isProd
           ? {
               url: process.env.DATABASE_URL,
+              ssl: true,
               type: 'postgres',
               synchronize: (process.env
                 .DATABASE_SYNCHRONIZE as unknown) as boolean,
