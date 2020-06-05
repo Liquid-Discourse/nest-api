@@ -15,12 +15,8 @@ const isProd = process.env.NODE_ENV === 'production';
         return isProd
           ? {
               url: process.env.DATABASE_URL,
-              extra: {
-                ssl: true,
-              },
               type: 'postgres',
-              synchronize: (process.env
-                .DATABASE_SYNCHRONIZE as unknown) as boolean,
+              synchronize: true,
               autoLoadEntities: true,
             }
           : {
