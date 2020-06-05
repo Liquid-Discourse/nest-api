@@ -1,15 +1,12 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 
+// DTO
+import { CreateUserDTO } from './user.dto';
+
 // Database access
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-// A DTO is a data transfer object (basically just the stuff submitted in the website form)
-// we get validation for free!
-export class CreateUserDTO {
-  emailAddress: string;
-}
 
 @Controller('users')
 export class UsersController {
