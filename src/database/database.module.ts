@@ -14,9 +14,9 @@ const isProd = process.env.NODE_ENV === 'production';
       useFactory: (configService: ConfigService) => {
         return isProd
           ? {
-              url: process.env.DATABASE_URL,
+              url: configService.get('DATABASE_URL'),
               type: 'postgres',
-              synchronize: true,
+              synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE'),
               autoLoadEntities: true,
             }
           : {
@@ -26,10 +26,7 @@ const isProd = process.env.NODE_ENV === 'production';
               password: configService.get('DATABASE_PASSWORD'),
               database: configService.get('DATABASE_NAME'),
               type: 'postgres',
-              synchronize: configService.get<boolean>(
-                'DATABASE_SYNCHRONIZE',
-                false,
-              ),
+              synchronize: configService.get<boolean>('DATABASE_SYNCHRONIZE'),
               autoLoadEntities: true,
             };
       },
