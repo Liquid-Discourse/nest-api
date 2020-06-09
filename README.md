@@ -12,13 +12,15 @@
 
 ## Installation
 
-Use `yarn` for everything, not `npm`. 
+Use `yarn` for everything, not `npm`.
 
 ```bash
 $ yarn install
 ```
 
 ## Running the app
+
+First, get the `.env` file from the Notion page and put it in the root directory. Then you can run the following commands:
 
 ```bash
 # watch mode (recommended for dev)
