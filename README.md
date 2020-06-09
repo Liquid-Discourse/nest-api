@@ -12,6 +12,8 @@
 
 ## Installation
 
+Use `yarn` for everything, not `npm`. 
+
 ```bash
 $ yarn install
 ```

@@ -5,9 +5,19 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
+import { BooksModule } from './books/books.module';
+import { BookReviewsModule } from './book-reviews/book-reviews.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
-  imports: [AuthModule, DatabaseModule, UsersModule],
+  imports: [
+    AuthModule,
+    DatabaseModule,
+    UsersModule,
+    BooksModule,
+    BookReviewsModule,
+    TagsModule,
+  ],
   controllers: [AppController],
   providers: [],
 })

@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 // swagger for self-documenting code
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -10,6 +11,12 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      disableErrorMessages: true,
+    }),
+  );
 
   const options = new DocumentBuilder()
     .setTitle('Liquid Discourse API')
