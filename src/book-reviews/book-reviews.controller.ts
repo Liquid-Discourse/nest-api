@@ -23,7 +23,9 @@ export class BookReviewsController {
 
   @Get()
   getBookReviews(@Param() params): Promise<BookReviewEntity[]> {
-    return this.bookReviewsRepository.find();
+    return this.bookReviewsRepository.find({
+      relations: ['userWhoReviewed', 'book'], // expand the relations in the result,
+    });
   }
 
   @Post()
@@ -34,7 +36,7 @@ export class BookReviewsController {
     bookReview.ratingOutOfTen = body.ratingOutOfTen;
 
     const sarim = await this.usersRepository.findOne(1);
-    const harryPotter = await this.booksRepository.findOne(1);
+    const harryPotter = await this.booksRepository.findOne(2);
 
     bookReview.userWhoReviewed = sarim;
     bookReview.book = harryPotter;

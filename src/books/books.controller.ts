@@ -12,9 +12,10 @@ export class BooksController {
   ) {}
 
   @Get()
-  getBooks(@Param() params): Promise<BookEntity[]> {
-    // this.booksRepository.createQueryBuilder("book")
-    return this.booksRepository.find();
+  getBooks(@Param() params): Promise<any> {
+    return this.booksRepository.query(`SELECT b.id, b.name FROM book b
+    LEFT OUTER JOIN book_review r ON b.id = r."bookId"
+    GROUP BY b.id, b.name ORDER BY Count(r."bookId") DESC`);
   }
 
   @Post()
