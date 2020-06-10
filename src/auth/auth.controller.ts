@@ -1,12 +1,11 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Req } from '@nestjs/common';
+import { getAuth0UserProfileFromRequest } from './auth.utilities';
 
 @Controller('auth')
 export class AuthController {
   @Get('test')
-  @UseGuards(AuthGuard('jwt'))
   async auth(@Req() req) {
-    console.log(req);
-    return 'Hello world';
+    const profile = await getAuth0UserProfileFromRequest(req);
+    return profile;
   }
 }
