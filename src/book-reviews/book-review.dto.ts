@@ -2,5 +2,6 @@
 
 // we get validation for free!
 export class CreateBookReviewDTO {
+  bookId: number;
   ratingOutOfTen: number;
 }

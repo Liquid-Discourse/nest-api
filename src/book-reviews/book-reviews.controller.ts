@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Req } from '@nestjs/common';
 import { BookReviewEntity } from './book-review.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,23 +24,33 @@ export class BookReviewsController {
   @Get()
   getBookReviews(@Param() params): Promise<BookReviewEntity[]> {
     return this.bookReviewsRepository.find({
-      relations: ['userWhoReviewed', 'book'], // expand the relations in the result,
+      relations: ['userWhoReviewed', 'book'], // expand the relations in the result
     });
   }
 
   @Post()
   async createBookReview(
+    @Req() req,
     @Body() body: CreateBookReviewDTO,
   ): Promise<BookReviewEntity> {
+    // get user from JWT token
+    const userCreatingTheReview = await this.usersRepository.findOne({
+      where: {
+        auth0Id: req?.user?.sub,
+      },
+    });
+    // get book
+    const bookBeingReviewed = await this.booksRepository.findOne({
+      where: {
+        id: body.bookId,
+      },
+    });
+    // create review
     const bookReview = new BookReviewEntity();
     bookReview.ratingOutOfTen = body.ratingOutOfTen;
-
-    const sarim = await this.usersRepository.findOne(1);
-    const harryPotter = await this.booksRepository.findOne(2);
-
-    bookReview.userWhoReviewed = sarim;
-    bookReview.book = harryPotter;
-
+    bookReview.userWhoReviewed = userCreatingTheReview;
+    bookReview.book = bookBeingReviewed;
+    // save
     return this.bookReviewsRepository.save(bookReview);
   }
 }
