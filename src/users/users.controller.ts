@@ -25,7 +25,7 @@ export class UsersController {
   }
 
   // getPublicProfile: get specific user profile by their username
-  @Get('@/:username')
+  @Get('profile/:username')
   getPublicProfile(@Param() params): Promise<UserEntity> {
     return this.usersRepository.findOne({
       relations: ['bookReviews', 'preferredTopics'],
@@ -35,9 +35,9 @@ export class UsersController {
     });
   }
 
-  // getFullProfile
-  @Get('profile')
-  async getFullProfile(@Req() req): Promise<any> {
+  // getSettings
+  @Get('settings')
+  async getSettings(@Req() req): Promise<any> {
     const dbProfile = await this.usersRepository.findOne({
       relations: ['bookReviews', 'preferredTopics'],
       where: {
