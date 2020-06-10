@@ -21,6 +21,10 @@ export class UserEntity {
   @Column({ unique: true })
   emailAddress: string;
 
+  // authOID: unique auth0 ID for the user
+  @Column({ unique: true })
+  auth0Id: string;
+
   // firstName: first name of the user
   @Column({ nullable: true })
   firstName: string;
