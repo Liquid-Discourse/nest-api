@@ -5,6 +5,7 @@ import { getAuth0UserProfileFromRequest } from './auth.utilities';
 export class AuthController {
   @Get('test')
   async auth(@Req() req) {
+    console.log(req)
     const profile = await getAuth0UserProfileFromRequest(req);
     return profile;
   }
