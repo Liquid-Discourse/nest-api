@@ -1,12 +1,37 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './users.controller';
+
+import { AuthModule } from '../auth/auth.module';
+
+// entities import
 import { UserEntity } from './user.entity';
 
+// controllers import
+import { UsersController } from './users.controller';
+
+// services import
+import { UsersService } from './users.service';
+import { AuthService } from '../auth/auth.service';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
-  providers: [],
+  // module imports
+  imports: [
+    // the typeorm library is modified to accept our user entity
+    TypeOrmModule.forFeature([UserEntity]),
+    // we do a forwardRef to break a circular dependency with
+    // AuthModule, which imports UsersModule
+    forwardRef(() => AuthModule),
+  ],
+
+  // services provide the functionality. we import the UsersService (within this
+  // module) and other services external to this module
+  providers: [UsersService, AuthService],
+
+  // the endpoints for the user module
   controllers: [UsersController],
-  exports: [TypeOrmModule],
+
+  // all the things I want to share with other modules, in this case the
+  // modified TypeOrm and the UsersService logic
+  exports: [TypeOrmModule, UsersService],
 })
 export class UsersModule {}

@@ -10,7 +10,6 @@ export class AuthController {
 
   @Get('test')
   async auth(@Req() req) {
-    console.log(req);
     const profile = await this.authService.getAuth0Profile(req);
     return profile;
   }
