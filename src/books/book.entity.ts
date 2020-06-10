@@ -21,6 +21,10 @@ export class BookEntity {
   @Column()
   name: string;
 
+  // author: who wrote it
+  @Column()
+  author: string;
+
   // isbn: unique ISBN identifier for this book.
   // TODO: should we enforce uniqueness?
   @Column()
