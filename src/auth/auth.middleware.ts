@@ -29,9 +29,11 @@ export class JWTMiddleware implements NestMiddleware {
         const auth0Profile = await this.authService.getAuth0Profile(request);
         const user: CreateUserDTO = {
           auth0Id: auth0Id,
+          username: auth0Id,
           emailAddress: await auth0Profile.email,
           firstName: await auth0Profile.given_name,
           restOfName: await auth0Profile.family_name,
+          picture: await auth0Profile.picture,
         };
         await this.usersService.create(user);
       }

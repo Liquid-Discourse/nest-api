@@ -3,7 +3,9 @@
 // we get validation for free!
 export class CreateUserDTO {
   auth0Id: string;
+  username: string;
   emailAddress: string;
   firstName?: string;
   restOfName?: string;
+  picture?: string;
 }

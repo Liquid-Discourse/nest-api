@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Req } from '@nestjs/common';
 
 // DTO
 import { CreateUserDTO } from './user.dto';
@@ -7,28 +7,53 @@ import { CreateUserDTO } from './user.dto';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+
+    private authService: AuthService,
   ) {}
 
+  // getUsers: get all users
   @Get()
   getUsers(): Promise<UserEntity[]> {
     return this.usersRepository.find({});
   }
 
-  @Get(':username')
-  getSpecificUser(@Param() params): string {
-    return `This action returns user with username: ${params.username}`;
+  // getPublicProfile: get specific user profile by their username
+  @Get('profile/:username')
+  getPublicProfile(@Param() params): Promise<UserEntity> {
+    return this.usersRepository.findOne({
+      relations: ['bookReviews', 'preferredTopics'],
+      where: {
+        username: params.username,
+      },
+    });
   }
 
+  // getSettings
+  @Get('settings')
+  async getSettings(@Req() req): Promise<any> {
+    const dbProfile = await this.usersRepository.findOne({
+      relations: ['bookReviews', 'preferredTopics'],
+      where: {
+        auth0Id: req?.user?.sub,
+      },
+    });
+    const auth0Metadata = await this.authService.getAuth0Profile(req);
+    return {
+      database: dbProfile,
+      auth0: auth0Metadata,
+    };
+  }
+
+  // createUser: create user from DTO object
   @Post()
   createUser(@Body() body: CreateUserDTO): Promise<UserEntity> {
-    const user = new UserEntity();
-    user.emailAddress = body.emailAddress;
-    return this.usersRepository.save(user);
+    return this.usersRepository.save(body);
   }
 }
