@@ -20,22 +20,20 @@ export class JWTMiddleware implements NestMiddleware {
 
   // create user if not exist in db
   async createUserIfNotExist(request) {
-    const auth0Profile = await this.authService.getAuth0Profile(request);
-    const auth0Id = await auth0Profile?.user_id;
-    if (await auth0Id) {
+    const auth0Id = request?.user?.sub;
+    if (auth0Id) {
       const existsInDb = await this.usersService.existsInDB({
         auth0Id: auth0Id,
       });
       if (await !existsInDb) {
+        const auth0Profile = await this.authService.getAuth0Profile(request);
         const user: CreateUserDTO = {
-          auth0Id: await auth0Id,
+          auth0Id: auth0Id,
           emailAddress: await auth0Profile.email,
           firstName: await auth0Profile.given_name,
           restOfName: await auth0Profile.family_name,
         };
         await this.usersService.create(user);
-      } else {
-        console.log('user already exists');
       }
     }
   }

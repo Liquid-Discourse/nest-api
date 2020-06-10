@@ -4,6 +4,7 @@
   - [Docs](#docs)
   - [Installation](#installation)
   - [Running the app](#running-the-app)
+  - [Potential problems](#potential-problems)
   - [Test](#test)
 
 ## Docs
@@ -61,6 +62,13 @@ $ yarn run start
 # production mode
 $ yarn run start:prod
 ```
+
+## Potential problems
+
+> Error connecting to database after schema change
+
+* Try deleting the database, creating one again, and restart API
+* Or, try to delete the table causing the trouble, and then restart API 
 
 ## Test
 
