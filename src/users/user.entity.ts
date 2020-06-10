@@ -17,13 +17,21 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // authOID: unique auth0 ID for the user
+  @Column({ unique: true })
+  auth0Id: string;
+
   // email: unique email address for the user
   @Column({ unique: true })
   emailAddress: string;
 
-  // authOID: unique auth0 ID for the user
+  // username: auto generated but mutable username
   @Column({ unique: true })
-  auth0Id: string;
+  username: string;
+
+  // picture: URL to user picture
+  @Column({ nullable: true })
+  picture: string;
 
   // firstName: first name of the user
   @Column({ nullable: true })

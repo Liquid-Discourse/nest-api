@@ -1,4 +1,10 @@
-import { Module, forwardRef } from '@nestjs/common';
+import {
+  Module,
+  forwardRef,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
@@ -12,6 +18,9 @@ import { UsersController } from './users.controller';
 // services import
 import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
+
+// JWTMiddleware: protects endpoints with JWT auth
+import { JWTMiddleware } from '../auth/auth.middleware';
 
 @Module({
   // module imports
@@ -34,4 +43,12 @@ import { AuthService } from '../auth/auth.service';
   // modified TypeOrm and the UsersService logic
   exports: [TypeOrmModule, UsersService],
 })
-export class UsersModule {}
+export class UsersModule {
+  // protect certain routes with JWT auth
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JWTMiddleware).forRoutes({
+      path: 'users/profile', // the path to the route we want to protect
+      method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
+    });
+  }
+}
