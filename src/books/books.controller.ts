@@ -18,12 +18,18 @@ export class BooksController {
     GROUP BY b.id, b.name ORDER BY Count(r."bookId") DESC`);
   }
 
+  @Get()
+  getOneBook(@Param() params): Promise<any> {
+    return this.booksRepository.find();
+  }
+
   @Post()
   createBook(@Body() body: CreateBookDTO): Promise<BookEntity> {
     const book = new BookEntity();
     book.name = body.name;
     book.author = body.author;
     book.isbn = body.isbn;
+    book.googleId = body.googleId;
     return this.booksRepository.save(book);
   }
 }
