@@ -13,6 +13,16 @@ export class BooksController {
 
   @Get()
   getBooks(@Param() params): Promise<any> {
+    // return this.booksRepository
+    //   .createQueryBuilder('book')
+    //   .leftJoinAndSelect('book.reviews', 'review')
+    //   .addSelect('Count(review.id)', 'reviewCount')
+    //   .groupBy('book.id, review.id')
+    //   .orderBy({
+    //     reviewCount: 'DESC',
+    //   })
+    //   .getMany();
+
     return this.booksRepository.query(`SELECT b.id, b.name FROM book b
     LEFT OUTER JOIN book_review r ON b.id = r."bookId"
     GROUP BY b.id, b.name ORDER BY Count(r."bookId") DESC`);
