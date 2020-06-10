@@ -17,7 +17,7 @@ export class UsersController {
 
   @Get()
   getUsers(): Promise<UserEntity[]> {
-    return this.usersRepository.find();
+    return this.usersRepository.find({});
   }
 
   @Get(':username')

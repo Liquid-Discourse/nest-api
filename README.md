@@ -20,7 +20,36 @@ $ yarn install
 
 ## Running the app
 
-First, get the `.env` file from the Notion page and put it in the root directory. Then you can run the following commands:
+First, get the `.env` file from the Notion page and put it in the root directory. Here are all the values the `.env` file should contain:
+
+```
+# server port
+PORT=
+
+# this is used to connect to the databsse
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_NAME=
+
+# this is used to force sync schema changes
+# if this is set to false, we need to figure out migrations
+DATABASE_SYNCHRONIZE=
+
+# Auth0 auth service (verify incoming JWT)
+AUTH0_DOMAIN=
+AUTH0_AUDIENCE=
+
+# Auth0 management service (query for user data)
+AUTH0_MANAGEMENT_CLIENT_ID=
+AUTH0_MANAGEMENT_CLIENT_SECRET=
+
+# this is the base URL / domain of this API
+BASE_URL=
+```
+
+With the `.env` in place, you can run the following commands to start the dev server:
 
 ```bash
 # watch mode (recommended for dev)
