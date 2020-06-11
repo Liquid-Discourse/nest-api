@@ -43,7 +43,7 @@ export class BooksController {
   createBook(@Body() body: CreateBookDTO): Promise<BookEntity> {
     const book = new BookEntity();
     book.name = body.name;
-    book.author = body.author;
+    book.authors = body.authors;
     book.isbn = body.isbn;
     return this.booksRepository.save(book);
   }

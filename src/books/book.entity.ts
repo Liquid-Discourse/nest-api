@@ -21,11 +21,9 @@ export class BookEntity {
   @Column()
   name: string;
 
-  // author: who wrote it
-  // @Column('simple-array', { default: '' })
-  // authors: string[];
+  // authors: who wrote it
   @Column({ type: 'text', array: true, nullable: true })
-  author: string[];
+  authors: string[];
 
   // isbn: unique ISBN identifier for this book.
   // TODO: should we enforce uniqueness?
