@@ -37,6 +37,11 @@ export class BookEntity {
   )
   reviews: BookReviewEntity[];
 
+  // reviewCount: how many reviews left for this book
+  // this is auto-updated using a subscriber
+  @Column({ default: 0 })
+  reviewCount: number;
+
   // tags: all the tags that belong to this book
   @ManyToMany(
     type => TagEntity,

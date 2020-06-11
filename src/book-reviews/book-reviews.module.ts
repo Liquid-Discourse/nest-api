@@ -1,4 +1,9 @@
-import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import {
+  Module,
+  MiddlewareConsumer,
+  RequestMethod,
+  forwardRef,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // JWTMiddleware: protects endpoints with JWT auth
@@ -8,6 +13,10 @@ import { BookReviewEntity } from './book-review.entity';
 
 // import controllers
 import { BookReviewsController } from './book-reviews.controller';
+
+// import services
+import { BooksService } from '../books/books.service';
+import { BookReviewSubscriber } from './book-review.subscriber';
 
 // import other modules
 import { AuthModule } from '../auth/auth.module';
@@ -22,11 +31,14 @@ import { BooksModule } from '../books/books.module';
     // we need functionality from these modules so we import them
     AuthModule,
     UsersModule,
-    BooksModule,
+    forwardRef(() => BooksModule),
   ],
 
   // all the endpoints/routes
   controllers: [BookReviewsController],
+
+  // all the logic
+  providers: [BooksService, BookReviewSubscriber],
 
   // we re-export TypeORM so the repositories can be used elsewhere
   exports: [TypeOrmModule],

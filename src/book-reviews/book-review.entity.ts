@@ -35,9 +35,4 @@ export class BookReviewEntity {
   // ratingOutOfTen: the rating left for this book
   @Column()
   ratingOutOfTen: number;
-
-  @AfterUpdate()
-  updateBookProperties() {
-    console.log(this);
-  }
 }
