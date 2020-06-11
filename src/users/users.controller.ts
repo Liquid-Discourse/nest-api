@@ -28,7 +28,7 @@ export class UsersController {
   @Get('profile/:username')
   getPublicProfile(@Param() params): Promise<UserEntity> {
     return this.usersRepository.findOne({
-      relations: ['bookReviews', 'preferredTopics'],
+      relations: ['bookReviews', 'bookReviews.book', 'preferredTopics'],
       where: {
         username: params.username,
       },
