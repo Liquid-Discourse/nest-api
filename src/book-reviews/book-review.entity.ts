@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  AfterUpdate,
+} from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
 
@@ -29,4 +35,9 @@ export class BookReviewEntity {
   // ratingOutOfTen: the rating left for this book
   @Column()
   ratingOutOfTen: number;
+
+  @AfterUpdate()
+  updateBookProperties() {
+    console.log(this);
+  }
 }
