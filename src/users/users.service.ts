@@ -53,7 +53,31 @@ export class UsersService {
     return users.length === 1;
   }
 
-  async create(userDTO: CreateUserDTO) {
-    return this.usersRepository.save(userDTO);
+  async createUserIfNotExist(request): Promise<UserEntity> {
+    // fetch the Auth0 ID from the JWT token
+    const auth0Id = request?.user?.sub;
+    // if there is an ID
+    if (auth0Id) {
+      // check if user exists in DB which corresponds to this ID
+      const existsInDb = await this.existsInDB({
+        auth0Id: auth0Id,
+      });
+      // if a user does not exist
+      if (await !existsInDb) {
+        // fetch the Auth0 profile using the Management API
+        const auth0Profile = await this.authService.getAuth0Profile(request);
+        // prepare a payload to save in our database
+        const user: CreateUserDTO = {
+          auth0Id: auth0Id,
+          username: auth0Id,
+          emailAddress: await auth0Profile.email,
+          firstName: await auth0Profile.given_name,
+          restOfName: await auth0Profile.family_name,
+          picture: await auth0Profile.picture,
+        };
+        // save this to the database
+        return this.usersRepository.save(user);
+      }
+    }
   }
 }

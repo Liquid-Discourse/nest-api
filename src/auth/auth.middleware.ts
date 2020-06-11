@@ -3,8 +3,6 @@ import * as jwt from 'express-jwt';
 import { expressJwtSecret } from 'jwks-rsa';
 import { Request, Response } from 'express';
 import { UsersService } from '../users/users.service';
-import { CreateUserDTO } from '../users/user.dto';
-import { AuthService } from './auth.service';
 
 // source:
 // https://github.com/bipiane/nest-react-auth0-blog/blob/master/blog-api/src/common/authentication.middleware.ts
@@ -13,32 +11,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class JWTMiddleware implements NestMiddleware {
   // inject users service
-  constructor(
-    private usersService: UsersService,
-    private authService: AuthService,
-  ) {}
-
-  // create user if not exist in db
-  async createUserIfNotExist(request) {
-    const auth0Id = request?.user?.sub;
-    if (auth0Id) {
-      const existsInDb = await this.usersService.existsInDB({
-        auth0Id: auth0Id,
-      });
-      if (await !existsInDb) {
-        const auth0Profile = await this.authService.getAuth0Profile(request);
-        const user: CreateUserDTO = {
-          auth0Id: auth0Id,
-          username: auth0Id,
-          emailAddress: await auth0Profile.email,
-          firstName: await auth0Profile.given_name,
-          restOfName: await auth0Profile.family_name,
-          picture: await auth0Profile.picture,
-        };
-        await this.usersService.create(user);
-      }
-    }
-  }
+  constructor(private usersService: UsersService) {}
 
   // define use method for middleware
   use(req: Request, res: Response, next: Function) {
@@ -64,7 +37,7 @@ export class JWTMiddleware implements NestMiddleware {
       }
 
       // check if user exists. if not, create the user for first time
-      this.createUserIfNotExist(req);
+      // this.usersService.createUserIfNotExist(req);
 
       next();
     });

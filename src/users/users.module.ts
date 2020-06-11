@@ -46,9 +46,15 @@ import { JWTMiddleware } from '../auth/auth.middleware';
 export class UsersModule {
   // protect certain routes with JWT auth
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JWTMiddleware).forRoutes({
-      path: 'users/settings', // the path to the route we want to protect
-      method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
-    });
+    consumer.apply(JWTMiddleware).forRoutes(
+      {
+        path: 'users/settings', // the path to the route we want to protect
+        method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
+      },
+      {
+        path: 'users', // the path to the route we want to protect
+        method: RequestMethod.POST, // the method e.g. GET, POST or ALL
+      },
+    );
   }
 }
