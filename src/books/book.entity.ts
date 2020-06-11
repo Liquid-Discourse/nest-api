@@ -21,11 +21,9 @@ export class BookEntity {
   @Column()
   name: string;
 
-  // author: who wrote it
-  // @Column('simple-array', { default: '' })
-  // authors: string[];
+  // authors: who wrote it
   @Column({ type: 'text', array: true, nullable: true })
-  author: string[];
+  authors: string[];
 
   // isbn: unique ISBN identifier for this book.
   // TODO: should we enforce uniqueness?
@@ -38,6 +36,11 @@ export class BookEntity {
     bookReview => bookReview.book,
   )
   reviews: BookReviewEntity[];
+
+  // reviewCount: how many reviews left for this book
+  // this is auto-updated using a subscriber
+  @Column({ default: 0 })
+  reviewCount: number;
 
   // tags: all the tags that belong to this book
   @ManyToMany(

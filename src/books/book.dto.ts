@@ -3,7 +3,7 @@
 // we get validation for free!
 export class CreateBookDTO {
   name: string;
-  author: string[];
+  authors: string[];
   isbn: string;
   googleId: string;
 }

@@ -11,22 +11,15 @@ export class BooksController {
     private readonly booksRepository: Repository<BookEntity>,
   ) {}
 
-  // @Get()
-  // getBooks(@Param() params): Promise<any> {
-  //   // return this.booksRepository
-  //   //   .createQueryBuilder('book')
-  //   //   .leftJoinAndSelect('book.reviews', 'review')
-  //   //   .addSelect('Count(review.id)', 'reviewCount')
-  //   //   .groupBy('book.id, review.id')
-  //   //   .orderBy({
-  //   //     reviewCount: 'DESC',
-  //   //   })
-  //   //   .getMany();
-
-  //   return this.booksRepository.query(`SELECT b.id, b.name FROM book b
-  //   LEFT OUTER JOIN book_review r ON b.id = r."bookId"
-  //   GROUP BY b.id, b.name ORDER BY Count(r."bookId") DESC`);
-  // }
+  @Get()
+  getBooks(@Param() params): Promise<any> {
+    // order by review count
+    return this.booksRepository.find({
+      order: {
+        reviewCount: 'DESC',
+      },
+    });
+  }
 
   @Post('getonebook')
   async getOneBook(@Body() body): Promise<any> {
@@ -43,7 +36,7 @@ export class BooksController {
   createBook(@Body() body: CreateBookDTO): Promise<BookEntity> {
     const book = new BookEntity();
     book.name = body.name;
-    book.author = body.author;
+    book.authors = body.authors;
     book.isbn = body.isbn;
     return this.booksRepository.save(book);
   }

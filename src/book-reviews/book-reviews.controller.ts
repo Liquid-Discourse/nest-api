@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Body, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Req,
+  Delete,
+} from '@nestjs/common';
 import { BookReviewEntity } from './book-review.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,6 +36,28 @@ export class BookReviewsController {
     });
   }
 
+  @Get(':reviewId')
+  async getBookReview(@Param() params): Promise<BookReviewEntity> {
+    return this.bookReviewsRepository.findOne({
+      relations: ['userWhoReviewed', 'book'],
+      where: {
+        id: params.reviewId,
+      },
+    });
+  }
+
+  @Delete(':reviewId')
+  async deleteBookReview(@Param() params): Promise<BookReviewEntity> {
+    const reviewId = params.reviewId;
+    const bookReview = await this.bookReviewsRepository.findOne({
+      relations: ['userWhoReviewed', 'book'],
+      where: {
+        id: reviewId,
+      },
+    });
+    return this.bookReviewsRepository.remove(bookReview);
+  }
+
   @Post()
   async createBookReview(
     @Req() req,
@@ -48,6 +78,7 @@ export class BookReviewsController {
     // check if review already exists
     let bookReview: BookReviewEntity;
     bookReview = await this.bookReviewsRepository.findOne({
+      relations: ['userWhoReviewed', 'book'],
       where: {
         userWhoReviewed: userCreatingTheReview,
         book: bookBeingReviewed,
