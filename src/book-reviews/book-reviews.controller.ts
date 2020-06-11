@@ -47,14 +47,26 @@ export class BookReviewsController {
   }
 
   @Delete(':reviewId')
-  async deleteBookReview(@Param() params): Promise<BookReviewEntity> {
+  async deleteBookReview(
+    @Req() req,
+    @Param() params,
+  ): Promise<BookReviewEntity> {
+    // get user from JWT token
+    const userWhoReviewed = await this.usersRepository.findOne({
+      where: {
+        auth0Id: req?.user?.sub,
+      },
+    });
+    // get review
     const reviewId = params.reviewId;
     const bookReview = await this.bookReviewsRepository.findOne({
       relations: ['userWhoReviewed', 'book'],
       where: {
         id: reviewId,
+        userWhoReviewed: userWhoReviewed,
       },
     });
+    // remove it
     return this.bookReviewsRepository.remove(bookReview);
   }
 

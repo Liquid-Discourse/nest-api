@@ -47,9 +47,15 @@ export class BookReviewsModule {
   // protect certain routes with JWT auth
   // i.e. we only want logged in users to be able to create reviews
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JWTMiddleware).forRoutes({
-      path: 'book-reviews', // the path to the route we want to protect
-      method: RequestMethod.POST, // the method e.g. GET, POST or ALL
-    });
+    consumer.apply(JWTMiddleware).forRoutes(
+      {
+        path: 'book-reviews', // the path to the route we want to protect
+        method: RequestMethod.POST, // the method e.g. GET, POST or ALL
+      },
+      {
+        path: 'book-reviews/:reviewId', // the path to the route we want to protect
+        method: RequestMethod.DELETE, // the method e.g. GET, POST or ALL
+      },
+    );
   }
 }
