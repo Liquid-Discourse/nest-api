@@ -45,11 +45,23 @@ export class BookReviewsController {
         id: body.bookId,
       },
     });
-    // create review
-    const bookReview = new BookReviewEntity();
-    bookReview.ratingOutOfTen = body.ratingOutOfTen;
-    bookReview.userWhoReviewed = userCreatingTheReview;
-    bookReview.book = bookBeingReviewed;
+    // check if review already exists
+    let bookReview: BookReviewEntity;
+    bookReview = await this.bookReviewsRepository.findOne({
+      where: {
+        userWhoReviewed: userCreatingTheReview,
+        book: bookBeingReviewed,
+      },
+    });
+    // if exists, just update rating, otherwise create anew
+    if (await bookReview) {
+      bookReview.ratingOutOfTen = body.ratingOutOfTen;
+    } else {
+      bookReview = new BookReviewEntity();
+      bookReview.ratingOutOfTen = body.ratingOutOfTen;
+      bookReview.userWhoReviewed = userCreatingTheReview;
+      bookReview.book = bookBeingReviewed;
+    }
     // save
     return this.bookReviewsRepository.save(bookReview);
   }
