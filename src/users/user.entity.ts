@@ -22,7 +22,7 @@ export class UserEntity {
   auth0Id: string;
 
   // email: unique email address for the user
-  @Column({ unique: true })
+  @Column({ nullable: true })
   emailAddress: string;
 
   // username: auto generated but mutable username
