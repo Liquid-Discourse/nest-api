@@ -2,7 +2,6 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as jwt from 'express-jwt';
 import { expressJwtSecret } from 'jwks-rsa';
 import { Request, Response } from 'express';
-import { UsersService } from '../users/users.service';
 
 // source:
 // https://github.com/bipiane/nest-react-auth0-blog/blob/master/blog-api/src/common/authentication.middleware.ts
@@ -10,9 +9,6 @@ import { UsersService } from '../users/users.service';
 // when the token is deemed valid does the endpoint become accessible
 @Injectable()
 export class JWTMiddleware implements NestMiddleware {
-  // inject users service
-  constructor(private usersService: UsersService) {}
-
   // define use method for middleware
   use(req: Request, res: Response, next: Function) {
     jwt({
@@ -35,9 +31,6 @@ export class JWTMiddleware implements NestMiddleware {
           message,
         });
       }
-
-      // check if user exists. if not, create the user for first time
-      // this.usersService.createUserIfNotExist(req);
 
       next();
     });
