@@ -15,6 +15,7 @@ export class BooksController {
   getBooks(@Param() params): Promise<any> {
     // order by review count
     return this.booksRepository.find({
+      relations: ['tags', 'reviews'],
       order: {
         reviewCount: 'DESC',
       },
@@ -24,6 +25,12 @@ export class BooksController {
   @Post('getonebook')
   async getOneBook(@Body() body): Promise<any> {
     let check = await this.booksRepository.findOne({
+      relations: [
+        'tags',
+        'usersWhoListedOnBookShelf',
+        'reviews',
+        'reviews.userWhoReviewed',
+      ],
       where: {
         isbn: body.isbn,
       },

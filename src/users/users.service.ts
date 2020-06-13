@@ -102,14 +102,12 @@ export class UsersService {
     if (await !user) {
       return;
     }
-    await console.log(user);
     // fetch the book
     const book = await this.booksRepository.findOne({
       where: {
         id: bookId,
       },
     });
-    await console.log(book);
     if (await !book) {
       return;
     }

@@ -73,7 +73,6 @@ export class UsersController {
   // endpoint: /users/shelf
   @Post('shelf')
   addToShelf(@Req() request, @Body() body: any): Promise<UserEntity> {
-    console.log(body);
     return this.usersService.addToShelf(request, body.bookId);
   }
 }

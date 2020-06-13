@@ -11,6 +11,7 @@ import {
 
 import { BookReviewEntity } from './book-review.entity';
 import { BookEntity } from '../books/book.entity';
+import { TagEntity } from 'src/tags/tag.entity';
 
 @EventSubscriber()
 export class BookReviewSubscriber
@@ -49,16 +50,29 @@ export class BookReviewSubscriber
       reviews,
       reviewCount,
     ] = await this.bookReviewsRepository.findAndCount({
-      relations: ['book'],
+      relations: ['book', 'suggestedTags'],
       where: {
         book: {
           id: bookId,
         },
       },
     });
-    // update the reviewCount
+    if (await !reviews) {
+      return;
+    }
+    // get the book
     const book = await this.booksRepository.findOne(bookId);
+    // update the reviewCount
     book.reviewCount = await reviewCount;
+    // update the tags for the book based on all suggested tags
+    // use a set to remove duplicates
+    let collectTags: TagEntity[] = [];
+    await reviews.forEach(async review => {
+      collectTags = await collectTags.concat(review.suggestedTags);
+    });
+    collectTags = await Array.from(new Set(collectTags));
+    book.tags = await collectTags;
+    // save the book
     await this.booksRepository.save(book);
   }
 }

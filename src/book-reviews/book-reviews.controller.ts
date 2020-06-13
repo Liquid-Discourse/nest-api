@@ -79,7 +79,6 @@ export class BookReviewsController {
     @Req() req,
     @Body() body: CreateBookReviewDTO,
   ): Promise<BookReviewEntity> {
-    console.log(body);
     // get user from JWT token
     const userCreatingTheReview = await this.usersRepository.findOne({
       where: {
@@ -110,18 +109,20 @@ export class BookReviewsController {
     bookReview.userWhoReviewed = userCreatingTheReview;
     bookReview.book = bookBeingReviewed;
     // update book data tags
-    body.suggestedTags.forEach(async tagId => {
-      const tag = await this.tagsRepository.findOne({
-        where: {
-          id: tagId,
-        },
-      });
-      if (await tag) {
-        if (await !bookReview.suggestedTags.includes(tag)) {
-          bookReview.suggestedTags.push(tag);
+    if (body.suggestedTags) {
+      body.suggestedTags.forEach(async tagId => {
+        const tag = await this.tagsRepository.findOne({
+          where: {
+            id: tagId,
+          },
+        });
+        if (await tag) {
+          if (await !bookReview.suggestedTags.includes(tag)) {
+            bookReview.suggestedTags.push(tag);
+          }
         }
-      }
-    });
+      });
+    }
     // save
     return this.bookReviewsRepository.save(bookReview);
   }
