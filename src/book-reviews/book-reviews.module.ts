@@ -29,8 +29,8 @@ import { BooksModule } from '../books/books.module';
     TypeOrmModule.forFeature([BookReviewEntity]),
 
     // we need functionality from these modules so we import them
-    AuthModule,
-    UsersModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UsersModule),
     forwardRef(() => BooksModule),
   ],
 

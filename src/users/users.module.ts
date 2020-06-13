@@ -8,6 +8,7 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
+import { BooksModule } from '../books/books.module';
 
 // entities import
 import { UserEntity } from './user.entity';
@@ -29,6 +30,7 @@ import { JWTMiddleware } from '../auth/auth.middleware';
     TypeOrmModule.forFeature([UserEntity]),
     // we do a forwardRef to break a circular dependency with
     // AuthModule, which imports UsersModule
+    forwardRef(() => BooksModule),
     forwardRef(() => AuthModule),
   ],
 
@@ -53,6 +55,10 @@ export class UsersModule {
       },
       {
         path: 'users', // the path to the route we want to protect
+        method: RequestMethod.POST, // the method e.g. GET, POST or ALL
+      },
+      {
+        path: 'users/shelf', // the path to the route we want to protect
         method: RequestMethod.POST, // the method e.g. GET, POST or ALL
       },
     );

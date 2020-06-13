@@ -15,6 +15,7 @@ import { UserEntity } from './user.entity';
 // external services
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDTO } from './user.dto';
+import { BookEntity } from '../books/book.entity';
 
 interface existsInDbArgs {
   auth0Id?: string;
@@ -29,6 +30,10 @@ export class UsersService {
     //  we inject the UserEntity as a repository.
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+
+    //  we inject the UserEntity as a repository.
+    @InjectRepository(BookEntity)
+    private readonly booksRepository: Repository<BookEntity>,
 
     // we also inject external services
     private authService: AuthService,
@@ -79,5 +84,39 @@ export class UsersService {
         return this.usersRepository.save(user);
       }
     }
+  }
+
+  async addToShelf(request, bookId: string): Promise<UserEntity> {
+    // fetch the Auth0 ID from the JWT token
+    const auth0Id = request?.user?.sub;
+    if (!auth0Id) {
+      return;
+    }
+    // fetch the user
+    const user = await this.usersRepository.findOne({
+      relations: ['bookShelf'],
+      where: {
+        auth0Id: auth0Id,
+      },
+    });
+    if (await !user) {
+      return;
+    }
+    await console.log(user);
+    // fetch the book
+    const book = await this.booksRepository.findOne({
+      where: {
+        id: bookId,
+      },
+    });
+    await console.log(book);
+    if (await !book) {
+      return;
+    }
+    // store to shelf
+    if (await !user.bookShelf.includes(book)) {
+      await user.bookShelf.push(book);
+    }
+    return this.usersRepository.save(await user);
   }
 }

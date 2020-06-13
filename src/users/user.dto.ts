@@ -9,3 +9,7 @@ export class CreateUserDTO {
   restOfName?: string;
   picture?: string;
 }
+
+export class AddToBookShelfDTO {
+  bookId: string;
+}

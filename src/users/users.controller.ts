@@ -7,6 +7,9 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from './users.service';
 
+import { AddToBookShelfDTO } from './user.dto';
+import { BookEntity } from 'src/books/book.entity';
+
 @Controller('users')
 export class UsersController {
   constructor(
@@ -23,7 +26,12 @@ export class UsersController {
   @Get('profile/:username')
   getPublicProfile(@Param() params): Promise<UserEntity> {
     return this.usersRepository.findOne({
-      relations: ['bookReviews', 'bookReviews.book', 'preferredTopics'],
+      relations: [
+        'bookReviews',
+        'bookReviews.book',
+        'preferredTopics',
+        'bookShelf',
+      ],
       where: {
         username: params.username,
       },
@@ -36,7 +44,7 @@ export class UsersController {
   async getSettings(@Req() req): Promise<any> {
     const auth0Metadata = await this.authService.getAuth0Profile(req);
     const dbProfile = await this.usersRepository.findOne({
-      relations: ['bookReviews', 'preferredTopics'],
+      relations: ['bookReviews', 'preferredTopics', 'bookShelf'],
       where: {
         auth0Id: req?.user?.sub,
       },
@@ -59,5 +67,13 @@ export class UsersController {
   @Post()
   createUserIfNotExist(@Req() request): Promise<UserEntity> {
     return this.usersService.createUserIfNotExist(request);
+  }
+
+  // addToShelf: add to user's shelf if not already present
+  // endpoint: /users/shelf
+  @Post('shelf')
+  addToShelf(@Req() request, @Body() body: any): Promise<UserEntity> {
+    console.log(body);
+    return this.usersService.addToShelf(request, body.bookId);
   }
 }

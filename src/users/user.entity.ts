@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { BookReviewEntity } from '../book-reviews/book-review.entity';
 import { TagEntity } from '../tags/tag.entity';
+import { BookEntity } from '../books/book.entity';
 
 // I give it a manual name otherwise in postgres the table will be called
 // user_entity, which is fine but meh
@@ -69,4 +70,11 @@ export class UserEntity {
   )
   @JoinTable()
   preferredTopics: TagEntity[];
+
+  @ManyToMany(
+    type => BookEntity,
+    book => book.usersWhoListedOnBookShelf,
+  )
+  @JoinTable()
+  bookShelf: BookEntity[];
 }

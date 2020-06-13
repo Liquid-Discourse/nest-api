@@ -8,6 +8,7 @@ import {
 
 import { BookReviewEntity } from '../book-reviews/book-review.entity';
 import { TagEntity } from '../tags/tag.entity';
+import { UserEntity } from '../users/user.entity';
 
 // I give it a manual name otherwise in postgres the table will be called
 // book_entity, which is fine but meh
@@ -48,4 +49,11 @@ export class BookEntity {
     tag => tag.books,
   )
   tags: TagEntity[];
+
+  // usersWhoListedOnShelf: the users who listed the book on their shelf
+  @ManyToMany(
+    type => UserEntity,
+    user => user.bookShelf,
+  )
+  usersWhoListedOnBookShelf: UserEntity[];
 }
