@@ -43,7 +43,9 @@ export class BookReviewsController {
     };
     if (query.bookId) {
       options['where'] = {
-        bookId: query.bookId,
+        book: {
+          id: query.bookId,
+        },
       };
     }
     return this.bookReviewsRepository.find(options);
