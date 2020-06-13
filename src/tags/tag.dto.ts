@@ -10,5 +10,5 @@ export class CreateTagDTO {
 }
 
 export class QueryTagDTO {
-  type?: string;
+  type?: TagType;
 }
