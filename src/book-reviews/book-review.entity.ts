@@ -3,7 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  AfterUpdate,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
@@ -24,6 +23,8 @@ export class BookReviewEntity {
     type => UserEntity,
     // the back reference is with this property
     userWhoReviewed => userWhoReviewed.bookReviews,
+    // when the user is deleted, delete the review also
+    { onDelete: 'CASCADE' },
   )
   userWhoReviewed: UserEntity;
 

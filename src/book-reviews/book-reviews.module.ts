@@ -55,7 +55,7 @@ export class BookReviewsModule {
         method: RequestMethod.POST, // the method e.g. GET, POST or ALL
       },
       {
-        path: 'book-reviews/:reviewId', // the path to the route we want to protect
+        path: 'book-reviews', // the path to the route we want to protect
         method: RequestMethod.DELETE, // the method e.g. GET, POST or ALL
       },
     );

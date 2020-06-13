@@ -102,6 +102,23 @@ export class UsersController {
     return this.usersService.createUserIfNotExist(request);
   }
 
+  @Delete()
+  @ApiOperation({
+    summary: 'Remove a user. Requires user token',
+    description: 'Remove a user. Requires user token',
+  })
+  @ApiBearerAuth()
+  async removeUser(@Req() req): Promise<UserEntity> {
+    // get user from JWT token
+    const user = await this.usersRepository.findOne({
+      where: {
+        auth0Id: req?.user?.sub,
+      },
+    });
+    // remove it
+    return this.usersRepository.remove(user);
+  }
+
   // addToShelf: add to user's shelf if not already present
   // endpoint: /users/shelf
   @Post('shelf')

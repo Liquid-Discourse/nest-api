@@ -50,16 +50,24 @@ export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(JWTMiddleware).forRoutes(
       {
-        path: 'users/settings', // the path to the route we want to protect
-        method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
-      },
-      {
         path: 'users', // the path to the route we want to protect
         method: RequestMethod.POST, // the method e.g. GET, POST or ALL
       },
       {
+        path: 'users', // the path to the route we want to protect
+        method: RequestMethod.DELETE, // the method e.g. GET, POST or ALL
+      },
+      {
+        path: 'users', // the path to the route we want to protect
+        method: RequestMethod.PATCH, // the method e.g. GET, POST or ALL
+      },
+      {
+        path: 'users/settings', // the path to the route we want to protect
+        method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
+      },
+      {
         path: 'users/shelf', // the path to the route we want to protect
-        method: RequestMethod.POST, // the method e.g. GET, POST or ALL
+        method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
       },
     );
   }
