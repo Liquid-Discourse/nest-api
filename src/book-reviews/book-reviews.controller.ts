@@ -104,8 +104,10 @@ export class BookReviewsController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new book review. Requires user token',
-    description: 'Create a new book review. Requires user token',
+    summary:
+      'Create a new book review. Posting repeatedly with same bookId and token updates the review. Requires user token',
+    description:
+      'Create a new book review. Posting repeatedly with same bookId and token updates the review. Requires user token',
   })
   @ApiBearerAuth()
   async createBookReview(

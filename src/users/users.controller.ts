@@ -82,8 +82,10 @@ export class UsersController {
   // endpoint: /users
   @Post()
   @ApiOperation({
-    summary: 'Create a new user via Auth0. Requires user token',
-    description: 'Create a new user via Auth0. Requires user token',
+    summary:
+      'Create a new user via Auth0. Cannot be used to update the user. Requires user token',
+    description:
+      'Create a new user via Auth0. Cannot be used to update the user. Requires user token',
   })
   @ApiBearerAuth()
   createUserIfNotExist(@Req() request): Promise<UserEntity> {
