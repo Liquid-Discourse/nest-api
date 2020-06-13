@@ -156,6 +156,7 @@ export class UsersController {
     @Req() request,
     @Body() body: UpdateUserDTO,
   ): Promise<UserEntity> {
+    console.log(body);
     // get user
     const user = await this.usersRepository.findOne({
       where: {
@@ -165,9 +166,10 @@ export class UsersController {
     if (await !user) {
       return;
     }
-    return this.usersRepository.save({
-      ...user,
-      body,
+    // update properties
+    Object.keys(body).forEach(key => {
+      user[key] = body[key];
     });
+    return this.usersRepository.save(user);
   }
 }
