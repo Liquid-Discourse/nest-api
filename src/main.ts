@@ -26,6 +26,7 @@ async function bootstrap() {
     .setTitle('Liquid Discourse API')
     .setDescription('All the endpoints and their parameters')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);

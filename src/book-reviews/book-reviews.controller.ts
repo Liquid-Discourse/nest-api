@@ -18,6 +18,9 @@ import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
 import { TagEntity } from '../tags/tag.entity';
 
+// Documentation
+import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+
 @Controller('book-reviews')
 export class BookReviewsController {
   constructor(
@@ -35,6 +38,11 @@ export class BookReviewsController {
   ) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Query for book reviews',
+    description:
+      'Query for book reviews. Supply optional parameters (below) to filter your search',
+  })
   getBookReviews(
     @Query() query: QueryBookReviewDTO,
   ): Promise<BookReviewEntity[]> {
@@ -52,6 +60,10 @@ export class BookReviewsController {
   }
 
   @Get(':reviewId')
+  @ApiOperation({
+    summary: 'Get a specific book review by its ID',
+    description: 'Get a specific book review by its ID',
+  })
   async getBookReview(@Param() params): Promise<BookReviewEntity> {
     return this.bookReviewsRepository.findOne({
       relations: ['userWhoReviewed', 'book', 'suggestedTags'],
@@ -62,6 +74,11 @@ export class BookReviewsController {
   }
 
   @Delete(':reviewId')
+  @ApiOperation({
+    summary: 'Delete a specific book review by its ID. Requires user token',
+    description: 'Delete a specific book review by its ID. Requires user token',
+  })
+  @ApiBearerAuth()
   async deleteBookReview(
     @Req() req,
     @Param() params,
@@ -86,6 +103,11 @@ export class BookReviewsController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new book review. Requires user token',
+    description: 'Create a new book review. Requires user token',
+  })
+  @ApiBearerAuth()
   async createBookReview(
     @Req() req,
     @Body() body: CreateBookReviewDTO,
