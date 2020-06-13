@@ -5,8 +5,9 @@ import { Repository } from 'typeorm';
 import { CreateBookDTO, QueryBookDTO } from './book.dto';
 
 // Documentation
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('books')
 @Controller('books')
 export class BooksController {
   constructor(

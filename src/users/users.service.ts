@@ -117,4 +117,34 @@ export class UsersService {
     }
     return this.usersRepository.save(await user);
   }
+
+  async removeFromShelf(request, bookId: number): Promise<UserEntity> {
+    // fetch the Auth0 ID from the JWT token
+    const auth0Id = request?.user?.sub;
+    if (!auth0Id) {
+      return;
+    }
+    // fetch the user
+    const user = await this.usersRepository.findOne({
+      relations: ['bookShelf'],
+      where: {
+        auth0Id: auth0Id,
+      },
+    });
+    if (await !user) {
+      return;
+    }
+    // fetch the book
+    const book = await this.booksRepository.findOne({
+      where: {
+        id: bookId,
+      },
+    });
+    if (await !book) {
+      return;
+    }
+    // remove from shelf
+    user.bookShelf = await user.bookShelf.filter(b => b !== book);
+    return this.usersRepository.save(await user);
+  }
 }

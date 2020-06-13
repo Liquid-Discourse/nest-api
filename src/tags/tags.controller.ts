@@ -6,8 +6,9 @@ import { Repository } from 'typeorm';
 import { CreateTagDTO, QueryTagDTO } from './tag.dto';
 
 // Documentation
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tags')
 @Controller('tags')
 export class TagsController {
   constructor(

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Param, Body, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  Body,
+  Req,
+  Delete,
+} from '@nestjs/common';
 
 // Database access
 import { UserEntity } from './user.entity';
@@ -7,12 +16,13 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from './users.service';
 
-import { AddToBookShelfDTO } from './user.dto';
+import { BookShelfDTO, UpdateUserDTO } from './user.dto';
 import { BookEntity } from 'src/books/book.entity';
 
 // Documentation
-import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -100,10 +110,47 @@ export class UsersController {
     description: "Add book to user's shelf. Requires user token",
   })
   @ApiBearerAuth()
-  addToShelf(
-    @Req() request,
-    @Body() body: AddToBookShelfDTO,
-  ): Promise<UserEntity> {
+  addToShelf(@Req() request, @Body() body: BookShelfDTO): Promise<UserEntity> {
     return this.usersService.addToShelf(request, body.bookId);
+  }
+
+  // removeFromShelf: delete from user's shelf if present
+  // endpoint: /users/shelf
+  @Delete('shelf')
+  @ApiOperation({
+    summary: "Remove book from user's shelf. Requires user token",
+    description: "Remove book from user's shelf. Requires user token",
+  })
+  @ApiBearerAuth()
+  removeFromShelf(
+    @Req() request,
+    @Body() body: BookShelfDTO,
+  ): Promise<UserEntity> {
+    return this.usersService.removeFromShelf(request, body.bookId);
+  }
+
+  @Patch()
+  @ApiOperation({
+    summary: 'Update a user. Requires user token',
+    description: 'Update a user. Requires user token',
+  })
+  @ApiBearerAuth()
+  async updateUser(
+    @Req() request,
+    @Body() body: UpdateUserDTO,
+  ): Promise<UserEntity> {
+    // get user
+    const user = await this.usersRepository.findOne({
+      where: {
+        auth0Id: request?.user?.sub,
+      },
+    });
+    if (await !user) {
+      return;
+    }
+    return this.usersRepository.save({
+      ...user,
+      body,
+    });
   }
 }

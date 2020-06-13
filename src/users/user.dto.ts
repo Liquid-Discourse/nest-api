@@ -10,6 +10,15 @@ export class CreateUserDTO {
   picture?: string;
 }
 
-export class AddToBookShelfDTO {
+export class UpdateUserDTO {
+  username?: string;
+  firstName?: string;
+  restOfName?: string;
+  profileIsPublic?: boolean;
+  picture?: string;
+  preferredTopics?: number[];
+}
+
+export class BookShelfDTO {
   bookId: number;
 }

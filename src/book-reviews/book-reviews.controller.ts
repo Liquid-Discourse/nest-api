@@ -12,15 +12,21 @@ import { BookReviewEntity } from './book-review.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBookReviewDTO, QueryBookReviewDTO } from './book-review.dto';
+
+import {
+  CreateBookReviewDTO,
+  QueryBookReviewDTO,
+  DeleteBookReviewDTO,
+} from './book-review.dto';
 
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
 import { TagEntity } from '../tags/tag.entity';
 
 // Documentation
-import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('book-reviews')
 @Controller('book-reviews')
 export class BookReviewsController {
   constructor(
@@ -73,7 +79,7 @@ export class BookReviewsController {
     });
   }
 
-  @Delete(':reviewId')
+  @Delete()
   @ApiOperation({
     summary: 'Delete a specific book review by its ID. Requires user token',
     description: 'Delete a specific book review by its ID. Requires user token',
@@ -81,7 +87,7 @@ export class BookReviewsController {
   @ApiBearerAuth()
   async deleteBookReview(
     @Req() req,
-    @Param() params,
+    @Body() body: DeleteBookReviewDTO,
   ): Promise<BookReviewEntity> {
     // get user from JWT token
     const userWhoReviewed = await this.usersRepository.findOne({
@@ -90,7 +96,7 @@ export class BookReviewsController {
       },
     });
     // get review
-    const reviewId = params.reviewId;
+    const reviewId = body.reviewId;
     const bookReview = await this.bookReviewsRepository.findOne({
       relations: ['userWhoReviewed', 'book', 'suggestedTags'],
       where: {
