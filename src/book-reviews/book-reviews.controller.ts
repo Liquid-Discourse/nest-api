@@ -15,6 +15,7 @@ import { CreateBookReviewDTO } from './book-review.dto';
 
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
+import { TagEntity } from '../tags/tag.entity';
 
 @Controller('book-reviews')
 export class BookReviewsController {
@@ -27,19 +28,22 @@ export class BookReviewsController {
 
     @InjectRepository(BookEntity)
     private readonly booksRepository: Repository<BookEntity>,
+
+    @InjectRepository(TagEntity)
+    private readonly tagsRepository: Repository<TagEntity>,
   ) {}
 
   @Get()
   getBookReviews(@Param() params): Promise<BookReviewEntity[]> {
     return this.bookReviewsRepository.find({
-      relations: ['userWhoReviewed', 'book'], // expand the relations in the result
+      relations: ['userWhoReviewed', 'book', 'suggestedTags'], // expand the relations in the result
     });
   }
 
   @Get(':reviewId')
   async getBookReview(@Param() params): Promise<BookReviewEntity> {
     return this.bookReviewsRepository.findOne({
-      relations: ['userWhoReviewed', 'book'],
+      relations: ['userWhoReviewed', 'book', 'suggestedTags'],
       where: {
         id: params.reviewId,
       },
@@ -60,7 +64,7 @@ export class BookReviewsController {
     // get review
     const reviewId = params.reviewId;
     const bookReview = await this.bookReviewsRepository.findOne({
-      relations: ['userWhoReviewed', 'book'],
+      relations: ['userWhoReviewed', 'book', 'suggestedTags'],
       where: {
         id: reviewId,
         userWhoReviewed: userWhoReviewed,
@@ -75,6 +79,7 @@ export class BookReviewsController {
     @Req() req,
     @Body() body: CreateBookReviewDTO,
   ): Promise<BookReviewEntity> {
+    console.log(body);
     // get user from JWT token
     const userCreatingTheReview = await this.usersRepository.findOne({
       where: {
@@ -90,21 +95,33 @@ export class BookReviewsController {
     // check if review already exists
     let bookReview: BookReviewEntity;
     bookReview = await this.bookReviewsRepository.findOne({
-      relations: ['userWhoReviewed', 'book'],
+      relations: ['userWhoReviewed', 'book', 'suggestedTags'],
       where: {
         userWhoReviewed: userCreatingTheReview,
         book: bookBeingReviewed,
       },
     });
     // if exists, just update rating, otherwise create anew
-    if (await bookReview) {
-      bookReview.ratingOutOfTen = body.ratingOutOfTen;
-    } else {
+    if (!(await bookReview)) {
       bookReview = new BookReviewEntity();
-      bookReview.ratingOutOfTen = body.ratingOutOfTen;
-      bookReview.userWhoReviewed = userCreatingTheReview;
-      bookReview.book = bookBeingReviewed;
     }
+    // update book data basics
+    bookReview.ratingOutOfTen = body.ratingOutOfTen;
+    bookReview.userWhoReviewed = userCreatingTheReview;
+    bookReview.book = bookBeingReviewed;
+    // update book data tags
+    body.suggestedTags.forEach(async tagId => {
+      const tag = await this.tagsRepository.findOne({
+        where: {
+          id: tagId,
+        },
+      });
+      if (await tag) {
+        if (await !bookReview.suggestedTags.includes(tag)) {
+          bookReview.suggestedTags.push(tag);
+        }
+      }
+    });
     // save
     return this.bookReviewsRepository.save(bookReview);
   }

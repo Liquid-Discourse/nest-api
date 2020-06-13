@@ -8,6 +8,7 @@ import {
 
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
+import { BookReviewEntity } from '../book-reviews/book-review.entity';
 
 export enum TagType {
   Affair = 'AFFAIR', // #BLM, Israel-Palestine, COVID-19 etc.
@@ -29,11 +30,11 @@ export class TagEntity {
   name: string;
 
   // description: long form description of the tag
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   // type: What type of Tag is it? Using this, we can accomodate a wide variety of usecases
-  @Column()
+  @Column({ default: TagType.Topic })
   type: TagType;
 
   // usersWhoListedAsPreferredTopic: users will be able to choose 3 preferred topics they
@@ -45,7 +46,17 @@ export class TagEntity {
   )
   usersWhoListedAsPreferredTopic: UserEntity[];
 
+  // reviewsSuggestingThisTag: book reviews that suggested this tag
+  @ManyToMany(
+    type => BookReviewEntity,
+    bookReview => bookReview.suggestedTags,
+  )
+  reviewsSuggestingThisTag: BookReviewEntity[];
+
+  // * AUTOMATIC PROPERTIES
+
   // books: all the books that belong to this tag
+  // this is auto-updated using a subscriber
   @ManyToMany(
     type => BookEntity,
     book => book.tags,

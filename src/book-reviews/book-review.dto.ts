@@ -4,4 +4,5 @@
 export class CreateBookReviewDTO {
   bookId: number;
   ratingOutOfTen: number;
+  suggestedTags?: number[];
 }

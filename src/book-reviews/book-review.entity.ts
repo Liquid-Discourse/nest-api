@@ -4,9 +4,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   AfterUpdate,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
+import { TagEntity } from '../tags/tag.entity';
 
 // I give it a manual name otherwise in postgres the table will be called
 // book_review_entity, which is fine but meh
@@ -35,4 +38,12 @@ export class BookReviewEntity {
   // ratingOutOfTen: the rating left for this book
   @Column()
   ratingOutOfTen: number;
+
+  // suggestedTags: the tags suggested in this review
+  @ManyToMany(
+    type => TagEntity,
+    tag => tag.reviewsSuggestingThisTag,
+  )
+  @JoinTable()
+  suggestedTags: TagEntity[];
 }

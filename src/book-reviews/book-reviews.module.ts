@@ -22,6 +22,7 @@ import { BookReviewSubscriber } from './book-review.subscriber';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { BooksModule } from '../books/books.module';
+import { TagsModule } from '../tags/tags.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { BooksModule } from '../books/books.module';
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
     forwardRef(() => BooksModule),
+    forwardRef(() => TagsModule),
   ],
 
   // all the endpoints/routes
