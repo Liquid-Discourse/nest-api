@@ -86,7 +86,7 @@ export class UsersService {
     }
   }
 
-  async addToShelf(request, bookId: string): Promise<UserEntity> {
+  async addToShelf(request, bookId: number): Promise<UserEntity> {
     // fetch the Auth0 ID from the JWT token
     const auth0Id = request?.user?.sub;
     if (!auth0Id) {

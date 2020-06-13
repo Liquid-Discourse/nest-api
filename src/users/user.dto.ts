@@ -11,5 +11,5 @@ export class CreateUserDTO {
 }
 
 export class AddToBookShelfDTO {
-  bookId: string;
+  bookId: number;
 }

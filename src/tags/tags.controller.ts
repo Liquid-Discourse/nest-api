@@ -5,6 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTagDTO, QueryTagDTO } from './tag.dto';
 
+// Documentation
+import { ApiOperation } from '@nestjs/swagger';
+
 @Controller('tags')
 export class TagsController {
   constructor(
@@ -13,6 +16,11 @@ export class TagsController {
   ) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Query for tags',
+    description:
+      'Query for tags. Supply optional parameters (below) to filter your search',
+  })
   getTags(@Query() query: QueryTagDTO): Promise<TagEntity[]> {
     const options = {
       relations: [
@@ -30,6 +38,10 @@ export class TagsController {
   }
 
   @Get(':tagId')
+  @ApiOperation({
+    summary: 'Get a specific tag by its ID',
+    description: 'Get a specific tag by its ID',
+  })
   getTag(@Param() params): Promise<TagEntity> {
     return this.tagsRepository.findOne({
       relations: [
@@ -44,6 +56,10 @@ export class TagsController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a new tag',
+    description: 'Create a new tag',
+  })
   createTag(@Body() body: CreateTagDTO): Promise<TagEntity> {
     return this.tagsRepository.save(body);
   }
