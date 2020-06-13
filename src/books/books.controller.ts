@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
 import { BookEntity } from './book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -32,16 +32,21 @@ export class BooksController {
         [query.order]: query.orderDirection ? query.orderDirection : 'DESC',
       };
     }
+    if (query.isbn) {
+      options['where'] = {
+        isbn: query.isbn,
+      };
+    }
     return this.booksRepository.find(options);
   }
 
-  @Post('getonebook')
+  @Get(':bookId')
   @ApiOperation({
-    summary: 'Get a specific book review by its ID *PENDING CHANGE TO GET*',
-    description: 'Get a specific book review by its ID *PENDING CHANGE TO GET*',
+    summary: 'Get a specific book review by its ID',
+    description: 'Get a specific book review by its ID',
   })
-  async getOneBook(@Body() body): Promise<any> {
-    let check = await this.booksRepository.findOne({
+  async getBook(@Param() params): Promise<any> {
+    return this.booksRepository.findOne({
       relations: [
         'tags',
         'usersWhoListedOnBookShelf',
@@ -49,10 +54,9 @@ export class BooksController {
         'reviews.userWhoReviewed',
       ],
       where: {
-        isbn: body.isbn,
+        id: params.bookId,
       },
     });
-    return check;
   }
 
   @Post()

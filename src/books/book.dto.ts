@@ -22,4 +22,5 @@ enum QueryBookOrderDirection {
 export class QueryBookDTO {
   order?: QueryBookOrder;
   orderDirection?: QueryBookOrderDirection;
+  isbn?: string;
 }
