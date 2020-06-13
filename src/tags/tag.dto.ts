@@ -5,8 +5,8 @@ import { TagType } from './tag.entity';
 // we get validation for free!
 export class CreateTagDTO {
   name: string;
+  type: TagType;
   description?: string;
-  type?: TagType;
 }
 
 export class QueryTagDTO {
