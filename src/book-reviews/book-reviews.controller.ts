@@ -4,6 +4,7 @@ import {
   Param,
   Post,
   Body,
+  Query,
   Req,
   Delete,
 } from '@nestjs/common';
@@ -11,7 +12,7 @@ import { BookReviewEntity } from './book-review.entity';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBookReviewDTO } from './book-review.dto';
+import { CreateBookReviewDTO, QueryBookReviewDTO } from './book-review.dto';
 
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
@@ -34,10 +35,18 @@ export class BookReviewsController {
   ) {}
 
   @Get()
-  getBookReviews(@Param() params): Promise<BookReviewEntity[]> {
-    return this.bookReviewsRepository.find({
+  getBookReviews(
+    @Query() query: QueryBookReviewDTO,
+  ): Promise<BookReviewEntity[]> {
+    const options = {
       relations: ['userWhoReviewed', 'book', 'suggestedTags'], // expand the relations in the result
-    });
+    };
+    if (query.bookId) {
+      options['where'] = {
+        bookId: query.bookId,
+      };
+    }
+    return this.bookReviewsRepository.find(options);
   }
 
   @Get(':reviewId')

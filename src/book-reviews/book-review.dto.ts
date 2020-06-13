@@ -6,3 +6,7 @@ export class CreateBookReviewDTO {
   ratingOutOfTen: number;
   suggestedTags?: number[];
 }
+
+export class QueryBookReviewDTO {
+  bookId?: number;
+}
