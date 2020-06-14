@@ -47,12 +47,7 @@ export class BooksController {
   })
   async getBook(@Param() params): Promise<any> {
     return this.booksRepository.findOne({
-      relations: [
-        'tags',
-        'usersWhoListedOnBookShelf',
-        'reviews',
-        'reviews.userWhoReviewed',
-      ],
+      relations: ['tags', 'reviews', 'reviews.userWhoReviewed'],
       where: {
         id: params.bookId,
       },

@@ -18,7 +18,3 @@ export class UpdateUserDTO {
   picture?: string;
   preferredTopics?: number[];
 }
-
-export class BookShelfDTO {
-  bookId: number;
-}

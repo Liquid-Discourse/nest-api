@@ -38,13 +38,6 @@ export class BookEntity {
   )
   reviews: BookReviewEntity[];
 
-  // usersWhoListedOnShelf: the users who listed the book on their shelf
-  @ManyToMany(
-    type => UserEntity,
-    user => user.bookShelf,
-  )
-  usersWhoListedOnBookShelf: UserEntity[];
-
   // * AUTOMATIC PROPERTIES
 
   // reviewCount: how many reviews left for this book
