@@ -16,7 +16,7 @@ import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { UsersService } from './users.service';
 
-import { BookShelfDTO, UpdateUserDTO } from './user.dto';
+import { UpdateUserDTO } from './user.dto';
 import { BookEntity } from 'src/books/book.entity';
 
 // Documentation
@@ -43,12 +43,7 @@ export class UsersController {
   })
   getPublicProfile(@Param() params): Promise<UserEntity> {
     return this.usersRepository.findOne({
-      relations: [
-        'bookReviews',
-        'bookReviews.book',
-        'preferredTopics',
-        'bookShelf',
-      ],
+      relations: ['bookReviews', 'bookReviews.book', 'preferredTopics'],
       where: {
         username: params.username,
       },
@@ -66,7 +61,7 @@ export class UsersController {
   async getSettings(@Req() req): Promise<any> {
     const auth0Metadata = await this.authService.getAuth0Profile(req);
     const dbProfile = await this.usersRepository.findOne({
-      relations: ['bookReviews', 'preferredTopics', 'bookShelf'],
+      relations: ['bookReviews', 'preferredTopics'],
       where: {
         auth0Id: req?.user?.sub,
       },
@@ -117,33 +112,6 @@ export class UsersController {
     });
     // remove it
     return this.usersRepository.remove(user);
-  }
-
-  // addToShelf: add to user's shelf if not already present
-  // endpoint: /users/shelf
-  @Post('shelf')
-  @ApiOperation({
-    summary: "Add book to user's shelf. Requires user token",
-    description: "Add book to user's shelf. Requires user token",
-  })
-  @ApiBearerAuth()
-  addToShelf(@Req() request, @Body() body: BookShelfDTO): Promise<UserEntity> {
-    return this.usersService.addToShelf(request, body.bookId);
-  }
-
-  // removeFromShelf: delete from user's shelf if present
-  // endpoint: /users/shelf
-  @Delete('shelf')
-  @ApiOperation({
-    summary: "Remove book from user's shelf. Requires user token",
-    description: "Remove book from user's shelf. Requires user token",
-  })
-  @ApiBearerAuth()
-  removeFromShelf(
-    @Req() request,
-    @Body() body: BookShelfDTO,
-  ): Promise<UserEntity> {
-    return this.usersService.removeFromShelf(request, body.bookId);
   }
 
   @Patch()

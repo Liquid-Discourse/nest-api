@@ -65,10 +65,6 @@ export class UsersModule {
         path: 'users/settings', // the path to the route we want to protect
         method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
       },
-      {
-        path: 'users/shelf', // the path to the route we want to protect
-        method: RequestMethod.ALL, // the method e.g. GET, POST or ALL
-      },
     );
   }
 }
