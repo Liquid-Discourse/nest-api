@@ -141,29 +141,33 @@ export class BookReviewsController {
         book: bookBeingReviewed,
       },
     });
-    // if exists, just update rating, otherwise create anew
+    // if not exists, create new review
     if (!(await bookReview)) {
       bookReview = new BookReviewEntity();
     }
-    // update book data basics
-    bookReview.ratingOutOfTen = body.ratingOutOfTen;
+    // update information
     bookReview.userWhoReviewed = userCreatingTheReview;
     bookReview.book = bookBeingReviewed;
-    // update book data tags
-    if (body.suggestedTags) {
-      body.suggestedTags.forEach(async tagId => {
-        const tag = await this.tagsRepository.findOne({
-          where: {
-            id: tagId,
-          },
-        });
-        if (await tag) {
-          if (await !bookReview.suggestedTags.includes(tag)) {
-            bookReview.suggestedTags.push(tag);
+    Object.keys(body).forEach(async key => {
+      if (key === 'suggestedTags') {
+        // update suggested tags
+        body.suggestedTags.forEach(async tagId => {
+          const tag = await this.tagsRepository.findOne({
+            where: {
+              id: tagId,
+            },
+          });
+          if (await tag) {
+            if (await !bookReview.suggestedTags.includes(tag)) {
+              await bookReview.suggestedTags.push(tag);
+            }
           }
-        }
-      });
-    }
+        });
+      } else {
+        // update other properties
+        bookReview[key] = body[key];
+      }
+    });
     // save
     return this.bookReviewsRepository.save(bookReview);
   }

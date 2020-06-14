@@ -156,7 +156,6 @@ export class UsersController {
     @Req() request,
     @Body() body: UpdateUserDTO,
   ): Promise<UserEntity> {
-    console.log(body);
     // get user
     const user = await this.usersRepository.findOne({
       where: {
