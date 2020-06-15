@@ -62,6 +62,14 @@ export class BookReviewsController {
         },
       };
     }
+    if (query.userId) {
+      options['where'] = {
+        ...options['where'],
+        userWhoReviewed: {
+          id: query.userId,
+        },
+      };
+    }
     return this.bookReviewsRepository.find(options);
   }
 
@@ -148,6 +156,9 @@ export class BookReviewsController {
     // update information
     bookReview.userWhoReviewed = userCreatingTheReview;
     bookReview.book = bookBeingReviewed;
+    if (await !bookReview.suggestedTags) {
+      bookReview.suggestedTags = [];
+    }
     Object.keys(body).forEach(async key => {
       if (key === 'suggestedTags') {
         // update suggested tags

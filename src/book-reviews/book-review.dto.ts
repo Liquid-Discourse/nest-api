@@ -10,6 +10,7 @@ export class CreateBookReviewDTO {
 
 export class QueryBookReviewDTO {
   bookId?: number;
+  userId?: number;
 }
 
 export class DeleteBookReviewDTO {
