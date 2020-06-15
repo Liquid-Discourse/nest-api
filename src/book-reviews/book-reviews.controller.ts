@@ -159,23 +159,13 @@ export class BookReviewsController {
     if (await !bookReview.suggestedTags) {
       bookReview.suggestedTags = [];
     }
+    // update other properties
     Object.keys(body).forEach(async key => {
-      if (key === 'suggestedTags') {
-        // update suggested tags
-        body.suggestedTags.forEach(async tagId => {
-          const tag = await this.tagsRepository.findOne({
-            where: {
-              id: tagId,
-            },
-          });
-          if (await tag) {
-            if (await !bookReview.suggestedTags.includes(tag)) {
-              await bookReview.suggestedTags.push(tag);
-            }
-          }
-        });
+      if (key === 'suggestedTags' && body['suggestedTags'].length) {
+        bookReview['suggestedTags'] = <any>body['suggestedTags'].map(tag => ({
+          id: tag,
+        }));
       } else {
-        // update other properties
         bookReview[key] = body[key];
       }
     });

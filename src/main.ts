@@ -18,9 +18,6 @@ async function bootstrap() {
   // TODO: allow access from only the production frontend and localhost in the future
   app.enableCors();
 
-  // show helpful error messages in response
-  app.useGlobalPipes(new ValidationPipe({}));
-
   // automatically generate docs at http://<api-domain>/docs
   const options = new DocumentBuilder()
     .setTitle('Liquid Discourse API')

@@ -36,6 +36,7 @@ export class BookReviewSubscriber
   }
 
   async afterInsert(event: InsertEvent<BookReviewEntity>) {
+    console.log('after insert');
     this.updateBook(event.entity.book.id);
     if (event.entity.suggestedTags) {
       this.updateTags(event.entity.suggestedTags.map(t => t.id));
@@ -43,6 +44,7 @@ export class BookReviewSubscriber
   }
 
   async afterRemove(event: RemoveEvent<BookReviewEntity>) {
+    console.log('after remove');
     this.updateBook(event.entity.book.id);
     if (event.entity.suggestedTags) {
       this.updateTags(event.entity.suggestedTags.map(t => t.id));
@@ -50,6 +52,7 @@ export class BookReviewSubscriber
   }
 
   async afterUpdate(event: UpdateEvent<BookReviewEntity>) {
+    console.log('after update');
     this.updateBook(event.entity.book.id);
     if (event.entity.suggestedTags) {
       this.updateTags(event.entity.suggestedTags.map(t => t.id));
@@ -78,6 +81,7 @@ export class BookReviewSubscriber
   }
 
   async updateBook(bookId: number) {
+    console.log('update book');
     // get all the reviews for this book
     const [
       reviews,
@@ -105,6 +109,7 @@ export class BookReviewSubscriber
     });
     collectTags = await Array.from(new Set(collectTags));
     book.tags = await collectTags;
+    await console.log(book.tags);
     // save the book
     await this.booksRepository.save(book);
   }
