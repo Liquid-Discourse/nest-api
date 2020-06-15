@@ -35,6 +35,12 @@ export class TagsController {
         type: query.type,
       };
     }
+    // optional ordering options
+    if (query.order) {
+      options['order'] = {
+        [query.order]: query.orderDirection ? query.orderDirection : 'DESC',
+      };
+    }
     return this.tagsRepository.find(options);
   }
 

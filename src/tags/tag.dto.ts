@@ -9,6 +9,17 @@ export class CreateTagDTO {
   description?: string;
 }
 
+enum QueryTagOrder {
+  bookCount = 'bookCount',
+}
+
+enum QueryTagOrderDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
 export class QueryTagDTO {
   type?: TagType;
+  order?: QueryTagOrder;
+  orderDirection?: QueryTagOrderDirection;
 }
