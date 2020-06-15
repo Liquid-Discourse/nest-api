@@ -28,6 +28,12 @@ export class BookReviewEntity {
   )
   userWhoReviewed: UserEntity;
 
+  // isCompleted: whether or not the book review is completed
+  // if isCompleted == false, then it's part of the unreviewed bookshelf
+  // else it's part of the reviewed bookshelf
+  @Column({ default: false })
+  isCompleted: boolean;
+
   // book: the book this review was for
   @ManyToOne(
     type => BookEntity,

@@ -3,8 +3,9 @@
 // we get validation for free!
 export class CreateBookReviewDTO {
   bookId: number;
-  ratingOutOfTen: number;
+  ratingOutOfTen?: number;
   suggestedTags?: number[];
+  isCompleted?: boolean;
 }
 
 export class QueryBookReviewDTO {

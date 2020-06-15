@@ -70,11 +70,4 @@ export class UserEntity {
   )
   @JoinTable()
   preferredTopics: TagEntity[];
-
-  @ManyToMany(
-    type => BookEntity,
-    book => book.usersWhoListedOnBookShelf,
-  )
-  @JoinTable()
-  bookShelf: BookEntity[];
 }
