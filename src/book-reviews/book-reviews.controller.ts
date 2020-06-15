@@ -120,7 +120,6 @@ export class BookReviewsController {
     @Req() req,
     @Body() body: CreateBookReviewDTO,
   ): Promise<BookReviewEntity> {
-    console.log(body);
     // get user from JWT token
     const userCreatingTheReview = await this.usersRepository.findOne({
       where: {
