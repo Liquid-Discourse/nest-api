@@ -11,7 +11,7 @@ import {
 
 import { BookReviewEntity } from './book-review.entity';
 import { BookEntity } from '../books/book.entity';
-import { TagEntity } from 'src/tags/tag.entity';
+import { TagEntity } from '../tags/tag.entity';
 
 @EventSubscriber()
 export class BookReviewSubscriber
@@ -24,6 +24,9 @@ export class BookReviewSubscriber
 
     @InjectRepository(BookReviewEntity)
     private readonly bookReviewsRepository: Repository<BookReviewEntity>,
+
+    @InjectRepository(TagEntity)
+    private readonly tagsRepository: Repository<TagEntity>,
   ) {
     connection.subscribers.push(this);
   }
@@ -33,18 +36,48 @@ export class BookReviewSubscriber
   }
 
   async afterInsert(event: InsertEvent<BookReviewEntity>) {
-    this.updateBookInformation(event.entity.book.id);
+    this.updateBook(event.entity.book.id);
+    if (event.entity.suggestedTags) {
+      this.updateTags(event.entity.suggestedTags.map(t => t.id));
+    }
   }
 
   async afterRemove(event: RemoveEvent<BookReviewEntity>) {
-    this.updateBookInformation(event.entity.book.id);
+    this.updateBook(event.entity.book.id);
+    if (event.entity.suggestedTags) {
+      this.updateTags(event.entity.suggestedTags.map(t => t.id));
+    }
   }
 
   async afterUpdate(event: UpdateEvent<BookReviewEntity>) {
-    this.updateBookInformation(event.entity.book.id);
+    this.updateBook(event.entity.book.id);
+    if (event.entity.suggestedTags) {
+      this.updateTags(event.entity.suggestedTags.map(t => t.id));
+    }
   }
 
-  async updateBookInformation(bookId: number) {
+  async updateTags(tagIds: number[]) {
+    tagIds.forEach(tag => {
+      this.updateTag(tag);
+    });
+  }
+
+  async updateTag(tagId: number) {
+    // we want to get the number of books for this tag
+    const tag = await this.tagsRepository.findOne({
+      relations: ['books'],
+      where: {
+        id: tagId,
+      },
+    });
+    if (await !tag) {
+      return;
+    }
+    tag.bookCount = await tag.books.length;
+    await this.tagsRepository.save(tag);
+  }
+
+  async updateBook(bookId: number) {
     // get all the reviews for this book
     const [
       reviews,

@@ -63,4 +63,9 @@ export class TagEntity {
   )
   @JoinTable()
   books: BookEntity[];
+
+  // bookCount: how many books belong to this tag
+  // this is auto-updated using a subscriber
+  @Column({ default: 0 })
+  bookCount: number;
 }
