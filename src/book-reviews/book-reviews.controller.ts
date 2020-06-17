@@ -150,25 +150,23 @@ export class BookReviewsController {
       },
     });
     // if not exists, create new review
-    if (!(await bookReview)) {
+    if (!bookReview) {
       bookReview = new BookReviewEntity();
     }
-    // update information
+    // update basic information
     bookReview.userWhoReviewed = userCreatingTheReview;
     bookReview.book = bookBeingReviewed;
-    if (await !bookReview.suggestedTags) {
-      bookReview.suggestedTags = [];
-    }
-    // update other properties
-    Object.keys(body).forEach(async key => {
-      if (key === 'suggestedTags' && body['suggestedTags'].length) {
-        bookReview['suggestedTags'] = <any>body['suggestedTags'].map(tag => ({
-          id: tag,
-        }));
-      } else {
-        bookReview[key] = body[key];
-      }
+    Object.keys(body).forEach(key => {
+      bookReview[key] = body[key];
     });
+    // update relational information
+    if (body.suggestedTags) {
+      bookReview.suggestedTags = [];
+      const tagEntities = await Promise.all(
+        body.suggestedTags.map(tagId => this.tagsRepository.findOne(tagId)),
+      );
+      bookReview.suggestedTags = tagEntities;
+    }
     // save
     return this.bookReviewsRepository.save(bookReview);
   }

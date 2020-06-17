@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "LAUNCH NEST JS DEBUG",
+      "program": "${workspaceFolder}/src/main.ts",
+      "preLaunchTask": "tsc: watch - tsconfig.build.json",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
+    }
+  ]
+}
