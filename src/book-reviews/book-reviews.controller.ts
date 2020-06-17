@@ -167,6 +167,8 @@ export class BookReviewsController {
       );
       bookReview.suggestedTags = tagEntities;
     }
+    // force update by updating timestamp (in order to ensure that the subscriber runs)
+    bookReview.updatedAt = new Date();
     // save
     return this.bookReviewsRepository.save(bookReview);
   }

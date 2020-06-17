@@ -5,6 +5,8 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { BookEntity } from '../books/book.entity';
@@ -17,6 +19,12 @@ export class BookReviewEntity {
   // id: auto generated id
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   // userWhoReviewed: the user who gave the review
   @ManyToOne(

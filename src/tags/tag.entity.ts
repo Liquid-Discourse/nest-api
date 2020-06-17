@@ -4,6 +4,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
@@ -24,6 +26,12 @@ export class TagEntity {
   // id: auto generated ID
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   // name: a short tag name
   @Column()

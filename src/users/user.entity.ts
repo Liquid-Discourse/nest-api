@@ -5,6 +5,8 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { BookReviewEntity } from '../book-reviews/book-review.entity';
 import { TagEntity } from '../tags/tag.entity';
@@ -17,6 +19,12 @@ export class UserEntity {
   // id: auto generated id
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   // authOID: unique auth0 ID for the user
   @Column({ unique: true })

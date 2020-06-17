@@ -73,7 +73,7 @@ export class BookReviewSubscriber
         id: tagId,
       },
     });
-    if (await !tag) {
+    if (!tag) {
       return;
     }
     tag.bookCount = await tag.books.length;
@@ -82,6 +82,18 @@ export class BookReviewSubscriber
 
   async updateBook(bookId: number) {
     console.log('update book');
+
+    // get the book
+    const book = await this.booksRepository.findOne({
+      relations: ['tags'],
+      where: {
+        id: bookId,
+      },
+    });
+    if (!book) {
+      return;
+    }
+
     // get all the reviews for this book
     const [
       reviews,
@@ -94,23 +106,26 @@ export class BookReviewSubscriber
         },
       },
     });
-    if (await !reviews) {
-      return;
-    }
-    // get the book
-    const book = await this.booksRepository.findOne(bookId);
+
     // update the reviewCount
-    book.reviewCount = await reviewCount;
-    // update the tags for the book based on all suggested tags
-    // use a set to remove duplicates
-    let collectTags: TagEntity[] = [];
-    await reviews.forEach(async review => {
-      collectTags = await collectTags.concat(review.suggestedTags);
+    book.reviewCount = reviewCount;
+
+    // get all the tags for the book
+    let collectTagIds: number[] = [];
+    reviews.forEach(review => {
+      collectTagIds = [
+        ...collectTagIds,
+        ...review.suggestedTags.map(tag => tag.id),
+      ];
     });
-    collectTags = await Array.from(new Set(collectTags));
-    book.tags = await collectTags;
-    await console.log(book.tags);
+    collectTagIds = Array.from(new Set(collectTagIds));
+    console.log(collectTagIds);
+    const finalTags: TagEntity[] = await Promise.all(
+      collectTagIds.map(id => this.tagsRepository.findOne(id)),
+    );
+    book.tags = finalTags;
+
     // save the book
-    await this.booksRepository.save(book);
+    this.booksRepository.save(book);
   }
 }
