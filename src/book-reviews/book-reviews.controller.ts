@@ -113,7 +113,9 @@ export class BookReviewsController {
       },
     });
     // remove it
-    return this.bookReviewsRepository.remove(bookReview);
+    await this.bookReviewsRepository.remove(bookReview);
+    await this.onBookReviewChange(bookReview);
+    return bookReview;
   }
 
   @Post()
@@ -172,13 +174,13 @@ export class BookReviewsController {
     const response = await this.bookReviewsRepository.save(bookReview);
 
     // callback to allow for updates
-    await this.onBookReviewAddOrUpdate(response);
+    await this.onBookReviewChange(response);
 
     // return
     return response;
   }
 
-  async onBookReviewAddOrUpdate(bookReview: BookReviewEntity) {
+  async onBookReviewChange(bookReview: BookReviewEntity) {
     // update the book
     await this.updateBookHelper(bookReview.book.id);
     // update the tags
