@@ -53,6 +53,11 @@ export class BookEntity {
   @Column({ default: 0 })
   reviewCount: number;
 
+  // averageRatingOutOfTen: the average rating for this book
+  // this is auto-updated using a subscriber
+  @Column({ default: 0 })
+  averageRatingOutOfTen: number;
+
   // tags: all the tags that belong to this book
   // this is auto-updated using a subscriber
   @ManyToMany(

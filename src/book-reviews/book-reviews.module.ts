@@ -16,7 +16,6 @@ import { BookReviewsController } from './book-reviews.controller';
 
 // import services
 import { BooksService } from '../books/books.service';
-import { BookReviewSubscriber } from './book-review.subscriber';
 
 // import other modules
 import { AuthModule } from '../auth/auth.module';
@@ -40,7 +39,7 @@ import { TagsModule } from '../tags/tags.module';
   controllers: [BookReviewsController],
 
   // all the logic
-  providers: [BooksService, BookReviewSubscriber],
+  providers: [BooksService],
 
   // we re-export TypeORM so the repositories can be used elsewhere
   exports: [TypeOrmModule],

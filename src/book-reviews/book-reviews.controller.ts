@@ -167,9 +167,103 @@ export class BookReviewsController {
       );
       bookReview.suggestedTags = tagEntities;
     }
-    // force update by updating timestamp (in order to ensure that the subscriber runs)
-    bookReview.updatedAt = new Date();
+
     // save
-    return this.bookReviewsRepository.save(bookReview);
+    const response = await this.bookReviewsRepository.save(bookReview);
+
+    // callback to allow for updates
+    await this.onBookReviewAddOrUpdate(response);
+
+    // return
+    return response;
+  }
+
+  async onBookReviewAddOrUpdate(bookReview: BookReviewEntity) {
+    // update the book
+    await this.updateBookHelper(bookReview.book.id);
+    // update the tags
+    if (bookReview.suggestedTags) {
+      this.updateTagsHelper(bookReview.suggestedTags.map(t => t.id));
+    }
+  }
+
+  async updateBookHelper(bookId: number) {
+    // get the book
+    const book = await this.booksRepository.findOne({
+      relations: ['tags'],
+      where: {
+        id: bookId,
+      },
+    });
+    if (!book) {
+      return;
+    }
+
+    // get all the reviews for this book
+    const [
+      reviews,
+      reviewCount,
+    ] = await this.bookReviewsRepository.findAndCount({
+      relations: ['book', 'suggestedTags'],
+      where: {
+        book: {
+          id: bookId,
+        },
+      },
+    });
+
+    // update the reviewCount
+    book.reviewCount = reviewCount;
+
+    // update the average rating
+    let ratingTally = 0;
+    reviews.forEach(review => {
+      ratingTally += review.ratingOutOfTen;
+    });
+    if (reviewCount > 0) {
+      book.averageRatingOutOfTen = ratingTally / reviewCount;
+    }
+
+    // get all the tags for the book
+    let collectTagIds: number[] = [];
+    reviews.forEach(review => {
+      collectTagIds = [
+        ...collectTagIds,
+        ...review.suggestedTags.map(tag => tag.id),
+      ];
+    });
+    collectTagIds = Array.from(new Set(collectTagIds));
+    console.log(collectTagIds);
+    const finalTags: TagEntity[] = await Promise.all(
+      collectTagIds.map(id => this.tagsRepository.findOne(id)),
+    );
+    book.tags = finalTags;
+
+    // save the book
+    await this.booksRepository.save(book);
+  }
+
+  async updateTagsHelper(tagIds: number[]) {
+    tagIds.forEach(tag => {
+      this.updateTagHelper(tag);
+    });
+  }
+
+  async updateTagHelper(tagId: number) {
+    // we want to get the number of books for this tag
+    const tag = await this.tagsRepository.findOne({
+      relations: ['books'],
+      where: {
+        id: tagId,
+      },
+    });
+    if (!tag) {
+      return;
+    }
+    if (tag?.books?.length) {
+      console.log('new length', tag.books.length);
+      tag.bookCount = tag.books.length;
+    }
+    await this.tagsRepository.save(tag);
   }
 }
