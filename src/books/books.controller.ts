@@ -60,10 +60,6 @@ export class BooksController {
     description: 'Create a new book',
   })
   createBook(@Body() body: CreateBookDTO): Promise<BookEntity> {
-    const book = new BookEntity();
-    book.name = body.name;
-    book.authors = body.authors;
-    book.isbn = body.isbn;
-    return this.booksRepository.save(book);
+    return this.booksRepository.save(body);
   }
 }
