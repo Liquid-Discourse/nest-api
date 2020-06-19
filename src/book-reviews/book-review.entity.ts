@@ -52,7 +52,11 @@ export class BookReviewEntity {
 
   // ratingOutOfTen: the rating left for this book
   @Column()
-  ratingOutOfTen: number;
+  ratingOutOfFive: number;
+
+  // description:
+  @Column({ nullable: true })
+  description: string;
 
   // suggestedTags: the tags suggested in this review
   @ManyToMany(

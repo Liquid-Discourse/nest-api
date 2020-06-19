@@ -220,10 +220,10 @@ export class BookReviewsController {
     // update the average rating
     let ratingTally = 0;
     reviews.forEach(review => {
-      ratingTally += review.ratingOutOfTen;
+      ratingTally += review.ratingOutOfFive;
     });
     if (reviewCount > 0) {
-      book.averageRatingOutOfTen = ratingTally / reviewCount;
+      book.averageRatingOutOfFive = ratingTally / reviewCount;
     }
 
     // get all the tags for the book
