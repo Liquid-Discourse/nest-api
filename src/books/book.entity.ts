@@ -53,7 +53,7 @@ export class BookEntity {
   @Column({ default: 0 })
   reviewCount: number;
 
-  // averageRatingOutOfTen: the average rating for this book
+  // averageRatingOutOfFive: the average rating for this book
   // this is auto-updated using a subscriber
   @Column({ default: 0 })
   averageRatingOutOfFive: number;
