@@ -20,6 +20,7 @@ enum QueryTagOrderDirection {
 
 export class QueryTagDTO {
   type?: TagType;
+  slug?: string;
   order?: QueryTagOrder;
   orderDirection?: QueryTagOrderDirection;
 }

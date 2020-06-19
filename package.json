@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/swagger": "^4.5.9",
     "@nestjs/typeorm": "^7.1.0",
+    "@sindresorhus/slugify": "^1.0.0",
     "auth0": "^2.26.0",
     "dotenv": "^8.2.0",
     "express-jwt": "^5.3.3",

@@ -27,6 +27,12 @@ export class TagEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // slug: a unique-ish URL slug for the tag
+  // uniqueness is not enforced on the db side but the server side
+  // when a tag is created via Post, a unique slug is created
+  @Column()
+  slug: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
