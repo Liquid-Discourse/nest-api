@@ -30,6 +30,7 @@ export class TagsController {
         'usersWhoListedAsPreferredTopic',
         'reviewsSuggestingThisTag',
         'books',
+        'books.tags',
       ], // expand the relations in the result
     };
     if (query.type) {
@@ -63,6 +64,7 @@ export class TagsController {
         'usersWhoListedAsPreferredTopic',
         'reviewsSuggestingThisTag',
         'books',
+        'books.tags',
       ], // expand the relations in the result
       where: {
         id: params.tagId,
