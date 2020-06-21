@@ -51,7 +51,7 @@ export class BookReviewEntity {
   book: BookEntity;
 
   // ratingOutOfFive: the rating left for this book
-  @Column()
+  @Column({ default: 0})
   ratingOutOfFive: number;
 
   // description:
