@@ -55,10 +55,6 @@ export class BookReviewsController {
     const options = {
       relations: ['userWhoReviewed', 'book', 'suggestedTags'], // expand the relations in the result
     };
-    options['where'] = {
-      ...options['where'],
-      isAdminReview: false,
-    };
     if (query.bookId) {
       options['where'] = {
         ...options['where'],
