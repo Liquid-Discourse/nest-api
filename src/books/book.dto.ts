@@ -5,6 +5,7 @@ export class CreateBookDTO {
   name: string;
   authors: string[];
   googleId: string;
+  description?: string;
 }
 
 enum QueryBookOrder {
