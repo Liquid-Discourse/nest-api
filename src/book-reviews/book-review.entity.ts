@@ -26,6 +26,11 @@ export class BookReviewEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  // isAdminReview: such reviews do not contribute to rating or text mining
+  // operations. They only exist as a mechanism to seed books in the database
+  @Column({ default: false })
+  isAdminReview: boolean;
+
   // userWhoReviewed: the user who gave the review
   @ManyToOne(
     type => UserEntity,
@@ -51,7 +56,7 @@ export class BookReviewEntity {
   book: BookEntity;
 
   // ratingOutOfFive: the rating left for this book
-  @Column({ default: 0})
+  @Column({ default: 0 })
   ratingOutOfFive: number;
 
   // description:

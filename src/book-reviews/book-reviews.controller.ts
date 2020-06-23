@@ -201,10 +201,24 @@ export class BookReviewsController {
       return;
     }
 
-    // get all the reviews for this book
+    // get all the user reviews for book (not including admin)
     const [
-      reviews,
-      reviewCount,
+      userReviews,
+      userReviewCount,
+    ] = await this.bookReviewsRepository.findAndCount({
+      relations: ['book', 'suggestedTags'],
+      where: {
+        book: {
+          id: bookId,
+        },
+        isAdminReview: false,
+      },
+    });
+
+    // get all the reviews for the book (including admin)
+    const [
+      allReviews,
+      allReviewsCount,
     ] = await this.bookReviewsRepository.findAndCount({
       relations: ['book', 'suggestedTags'],
       where: {
@@ -215,27 +229,26 @@ export class BookReviewsController {
     });
 
     // update the reviewCount
-    book.reviewCount = reviewCount;
+    book.reviewCount = userReviewCount;
 
     // update the average rating
     let ratingTally = 0;
-    reviews.forEach(review => {
+    userReviews.forEach(review => {
       ratingTally += review.ratingOutOfFive;
     });
-    if (reviewCount > 0) {
-      book.averageRatingOutOfFive = ratingTally / reviewCount;
+    if (userReviewCount > 0) {
+      book.averageRatingOutOfFive = ratingTally / userReviewCount;
     }
 
     // get all the tags for the book
     let collectTagIds: number[] = [];
-    reviews.forEach(review => {
+    allReviews.forEach(review => {
       collectTagIds = [
         ...collectTagIds,
         ...review.suggestedTags.map(tag => tag.id),
       ];
     });
     collectTagIds = Array.from(new Set(collectTagIds));
-    console.log(collectTagIds);
     const finalTags: TagEntity[] = await Promise.all(
       collectTagIds.map(id => this.tagsRepository.findOne(id)),
     );

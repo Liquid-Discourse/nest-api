@@ -30,6 +30,10 @@ export class UserEntity {
   @Column({ unique: true })
   auth0Id: string;
 
+  // isAdmin: user permissions
+  @Column({ default: false })
+  isAdmin: boolean;
+
   // email: unique email address for the user
   @Column({ nullable: true })
   emailAddress: string;
