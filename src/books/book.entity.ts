@@ -34,8 +34,7 @@ export class BookEntity {
   @Column({ type: 'text', array: true, nullable: true })
   authors: string[];
 
-  // isbn: unique ISBN identifier for this book.
-  // TODO: should we enforce uniqueness?
+  // googleId: unique identifier for this book.
   @Column()
   googleId: string;
 
