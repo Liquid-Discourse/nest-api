@@ -37,7 +37,7 @@ export class BookEntity {
   // isbn: unique ISBN identifier for this book.
   // TODO: should we enforce uniqueness?
   @Column()
-  isbn: string;
+  googleId: string;
 
   // reviews: all the reviews left for this book
   @OneToMany(
