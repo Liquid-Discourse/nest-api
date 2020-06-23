@@ -32,9 +32,9 @@ export class BooksController {
         [query.order]: query.orderDirection ? query.orderDirection : 'DESC',
       };
     }
-    if (query.isbn) {
+    if (query.googleId) {
       options['where'] = {
-        isbn: query.isbn,
+        googleId: query.googleId,
       };
     }
     return this.booksRepository.find(options);

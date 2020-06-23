@@ -4,7 +4,6 @@
 export class CreateBookDTO {
   name: string;
   authors: string[];
-  isbn: string;
   googleId: string;
 }
 
@@ -22,5 +21,5 @@ enum QueryBookOrderDirection {
 export class QueryBookDTO {
   order?: QueryBookOrder;
   orderDirection?: QueryBookOrderDirection;
-  isbn?: string;
+  googleId?: string;
 }
