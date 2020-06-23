@@ -30,6 +30,10 @@ export class BookEntity {
   @Column()
   name: string;
 
+  // description: description for the book
+  @Column({ nullable: true })
+  description: string;
+
   // authors: who wrote it
   @Column({ type: 'text', array: true, nullable: true })
   authors: string[];
