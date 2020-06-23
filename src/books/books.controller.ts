@@ -32,6 +32,11 @@ export class BooksController {
         [query.order]: query.orderDirection ? query.orderDirection : 'DESC',
       };
     }
+    if (query.googleId) {
+      options['where'] = {
+        googleId: query.googleId,
+      };
+    }
     return this.booksRepository.find(options);
   }
 

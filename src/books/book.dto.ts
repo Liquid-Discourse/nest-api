@@ -21,4 +21,5 @@ enum QueryBookOrderDirection {
 export class QueryBookDTO {
   order?: QueryBookOrder;
   orderDirection?: QueryBookOrderDirection;
+  googleId?: string;
 }
