@@ -45,9 +45,6 @@ AUTH0_AUDIENCE=
 # Auth0 management service (query for user data)
 AUTH0_MANAGEMENT_CLIENT_ID=
 AUTH0_MANAGEMENT_CLIENT_SECRET=
-
-# this is the base URL / domain of this API
-BASE_URL=
 ```
 
 With the `.env` in place, you can run the following commands to start the dev server:
@@ -67,8 +64,8 @@ $ yarn run start:prod
 
 > Error connecting to database after schema change
 
-* Try deleting the database, creating one again, and restart API
-* Or, try to delete the table causing the trouble, and then restart API 
+- Try deleting the database, creating one again, and restart API
+- Or, try to delete the table causing the trouble, and then restart API
 
 ## Test
 
