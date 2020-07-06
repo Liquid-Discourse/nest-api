@@ -10,15 +10,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // import entities
-import { BookEntity } from './book.entity';
+import { ItemEntity } from './item.entity';
 
 @Injectable()
-export class BooksService {
+export class ItemsService {
   // this shorthand constructor creates class members for us and initializes
   // them in the same statement
   constructor(
-    //  we inject the BookEntity as a repository
-    @InjectRepository(BookEntity)
-    private readonly booksRepository: Repository<BookEntity>,
+    //  we inject the ItemEntity as a repository
+    @InjectRepository(ItemEntity)
+    private readonly itemsRepository: Repository<ItemEntity>,
   ) {}
 }

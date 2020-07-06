@@ -17,7 +17,6 @@ import { AuthService } from '../auth/auth.service';
 import { UsersService } from './users.service';
 
 import { UpdateUserDTO } from './user.dto';
-import { BookEntity } from 'src/books/book.entity';
 
 // Documentation
 import { ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -44,10 +43,10 @@ export class UsersController {
   getPublicProfile(@Param() params): Promise<UserEntity> {
     return this.usersRepository.findOne({
       relations: [
-        'bookReviews',
-        'bookReviews.book',
+        'itemReviews',
+        'itemReviews.item',
         'preferredTopics',
-        'bookReviews.book.tags',
+        'itemReviews.item.tags',
       ],
       where: {
         username: params.username,
@@ -66,7 +65,7 @@ export class UsersController {
   async getSettings(@Req() req): Promise<any> {
     const auth0Metadata = await this.authService.getAuth0Profile(req);
     const dbProfile = await this.usersRepository.findOne({
-      relations: ['bookReviews', 'preferredTopics'],
+      relations: ['itemReviews', 'preferredTopics'],
       where: {
         auth0Id: req?.user?.sub,
       },

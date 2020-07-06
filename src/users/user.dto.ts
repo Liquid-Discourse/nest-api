@@ -16,5 +16,4 @@ export class UpdateUserDTO {
   restOfName?: string;
   profileIsPublic?: boolean;
   picture?: string;
-  preferredTopics?: number[];
 }

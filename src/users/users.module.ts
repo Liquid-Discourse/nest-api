@@ -8,7 +8,7 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/auth.module';
-import { BooksModule } from '../books/books.module';
+import { ItemsModule } from '../items/items.module';
 
 // entities import
 import { UserEntity } from './user.entity';
@@ -30,7 +30,7 @@ import { JWTMiddleware } from '../auth/auth.middleware';
     TypeOrmModule.forFeature([UserEntity]),
     // we do a forwardRef to break a circular dependency with
     // AuthModule, which imports UsersModule
-    forwardRef(() => BooksModule),
+    forwardRef(() => ItemsModule),
     forwardRef(() => AuthModule),
   ],
 

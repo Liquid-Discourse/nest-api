@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
-import { BooksModule } from './books/books.module';
-import { BookReviewsModule } from './book-reviews/book-reviews.module';
+import { ItemsModule } from './items/items.module';
+import { ItemReviewsModule } from './item-reviews/item-reviews.module';
 import { TagsModule } from './tags/tags.module';
 
 @Module({
@@ -14,8 +14,8 @@ import { TagsModule } from './tags/tags.module';
     AuthModule,
     DatabaseModule,
     UsersModule,
-    BooksModule,
-    BookReviewsModule,
+    ItemsModule,
+    ItemReviewsModule,
     TagsModule,
   ],
   controllers: [AppController],
