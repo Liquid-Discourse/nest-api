@@ -15,7 +15,7 @@ import { UserEntity } from './user.entity';
 // external services
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDTO } from './user.dto';
-import { BookEntity } from '../books/book.entity';
+import { ItemEntity } from '../items/item.entity';
 
 interface existsInDbArgs {
   auth0Id?: string;
@@ -31,9 +31,9 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
 
-    //  we inject the UserEntity as a repository.
-    @InjectRepository(BookEntity)
-    private readonly booksRepository: Repository<BookEntity>,
+    //  we inject the ItemEntity as a repository.
+    @InjectRepository(ItemEntity)
+    private readonly itemsRepository: Repository<ItemEntity>,
 
     // we also inject external services
     private authService: AuthService,

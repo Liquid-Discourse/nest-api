@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
-import { BookEntity } from '../books/book.entity';
-import { BookReviewEntity } from '../book-reviews/book-review.entity';
+import { ItemEntity } from '../items/item.entity';
+import { ItemReviewEntity } from '../item-reviews/item-review.entity';
 
 export enum TagType {
   Affair = 'AFFAIR', // #BLM, Israel-Palestine, COVID-19 etc.
@@ -51,35 +51,26 @@ export class TagEntity {
   @Column({ default: TagType.Topic })
   type: TagType;
 
-  // usersWhoListedAsPreferredTopic: users will be able to choose 3 preferred topics they
-  // consider themselves experts in. Their credibility score will apply to these
-  // topics only
+  // reviewsSuggestingThisTag: item reviews that suggested this tag
   @ManyToMany(
-    type => UserEntity,
-    user => user.preferredTopics,
+    type => ItemReviewEntity,
+    itemReview => itemReview.suggestedTags,
   )
-  usersWhoListedAsPreferredTopic: UserEntity[];
-
-  // reviewsSuggestingThisTag: book reviews that suggested this tag
-  @ManyToMany(
-    type => BookReviewEntity,
-    bookReview => bookReview.suggestedTags,
-  )
-  reviewsSuggestingThisTag: BookReviewEntity[];
+  reviewsSuggestingThisTag: ItemReviewEntity[];
 
   // * AUTOMATIC PROPERTIES
 
-  // books: all the books that belong to this tag
+  // items: all the items that belong to this tag
   // this is auto-updated using a subscriber
   @ManyToMany(
-    type => BookEntity,
-    book => book.tags,
+    type => ItemEntity,
+    item => item.tags,
   )
   @JoinTable()
-  books: BookEntity[];
+  items: ItemEntity[];
 
-  // bookCount: how many books belong to this tag
+  // itemCount: how many items belong to this tag
   // this is auto-updated using a subscriber
   @Column({ default: 0 })
-  bookCount: number;
+  itemCount: number;
 }

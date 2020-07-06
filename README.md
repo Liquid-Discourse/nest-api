@@ -1,6 +1,6 @@
-# Liquid Discourse NestJS API
+# Proofed NestJS API
 
-- [Liquid Discourse NestJS API](#liquid-discourse-nestjs-api)
+- [Proofed NestJS API](#proofed-nestjs-api)
   - [Docs](#docs)
   - [Installation](#installation)
   - [Running the app](#running-the-app)
@@ -9,7 +9,7 @@
 
 ## Docs
 
-<http://liquid-discourse-api.herokuapp.com/docs>
+<http://proofed-api.herokuapp.com/docs>
 
 ## Installation
 

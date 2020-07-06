@@ -10,7 +10,7 @@ export class CreateTagDTO {
 }
 
 enum QueryTagOrder {
-  bookCount = 'bookCount',
+  itemCount = 'itemCount',
 }
 
 enum QueryTagOrderDirection {

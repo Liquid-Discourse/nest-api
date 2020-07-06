@@ -1,26 +1,26 @@
 // A DTO is a data transfer object (basically just the stuff submitted in the website form)
 
 // we get validation for free!
-export class CreateBookDTO {
-  name: string;
-  authors: string[];
-  googleId: string;
+export class CreateItemDTO {
+  name?: string;
+  authors?: string[];
+  googleId?: string;
   description?: string;
 }
 
-enum QueryBookOrder {
+enum QueryItemOrder {
   reviewCount = 'reviewCount',
   name = 'name',
   authors = 'authors',
 }
 
-enum QueryBookOrderDirection {
+enum QueryItemOrderDirection {
   ASC = 'ASC',
   DESC = 'DESC',
 }
 
-export class QueryBookDTO {
-  order?: QueryBookOrder;
-  orderDirection?: QueryBookOrderDirection;
+export class QueryItemDTO {
+  order?: QueryItemOrder;
+  orderDirection?: QueryItemOrderDirection;
   googleId?: string;
 }
