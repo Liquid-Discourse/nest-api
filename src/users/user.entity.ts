@@ -11,6 +11,7 @@ import {
 
 import { ItemReviewEntity } from '../item-reviews/item-review.entity';
 import { ItemEntity } from '../items/item.entity';
+import { ListEntity } from '../lists/list.entity';
 
 // I give it a manual name otherwise in postgres the table will be called
 // user_entity, which is fine but meh
@@ -83,4 +84,11 @@ export class UserEntity {
   )
   @JoinTable()
   upvotedItems: ItemEntity[];
+
+  // lists: lists that belong to this user
+  @OneToMany(
+    type => ListEntity,
+    list => list.userWhoOwns,
+  )
+  lists: ListEntity[];
 }

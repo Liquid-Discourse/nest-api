@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { ItemsModule } from './items/items.module';
 import { ItemReviewsModule } from './item-reviews/item-reviews.module';
 import { TagsModule } from './tags/tags.module';
+import { ListsModule } from './lists/lists.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TagsModule } from './tags/tags.module';
     ItemsModule,
     ItemReviewsModule,
     TagsModule,
+    ListsModule,
   ],
   controllers: [AppController],
   providers: [],

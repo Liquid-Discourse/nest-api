@@ -12,6 +12,7 @@ import {
 import { ItemReviewEntity } from '../item-reviews/item-review.entity';
 import { TagEntity } from '../tags/tag.entity';
 import { UserEntity } from '../users/user.entity';
+import { ListEntity } from '../lists/list.entity';
 
 export enum ItemType {
   Book = 'BOOK',
@@ -81,6 +82,13 @@ export class ItemEntity {
     tag => tag.items,
   )
   tags: TagEntity[];
+
+  // lists: all the lists that contain this item
+  @ManyToMany(
+    type => ListEntity,
+    list => list.items,
+  )
+  lists: ListEntity[];
 
   // reviews: all the reviews left for this item
   @OneToMany(
