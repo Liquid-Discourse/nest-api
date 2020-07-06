@@ -20,7 +20,7 @@ async function bootstrap() {
 
   // automatically generate docs at http://<api-domain>/docs
   const options = new DocumentBuilder()
-    .setTitle('Liquid Discourse API')
+    .setTitle('Proofed API')
     .setDescription('All the endpoints and their parameters')
     .setVersion('1.0')
     .addBearerAuth()
